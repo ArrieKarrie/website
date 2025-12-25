@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WorkLayout from "../layouts/WorkLayout.astro";
+import Nav from "../components/Nav.astro";
+import MenuIcons from "../components/MenuIcons.astro";
+import Name from "../components/Name.astro";
+import BlurredOverlay from "../components/BlurredOverlay.astro";
+import CollectionSlider from "../components/CollectionSlider.astro";
+
+import { getCollection } from 'astro:content';
+const projects = await getCollection('projects');
+const portfolio = await getCollection('portfolio'); 
+---
+
+<BaseLayout title="AvD Photography | Portfolio">
+    <WorkLayout>
+        <Name/>
+        <Nav/>
+        <MenuIcons/>
+
+        <CollectionSlider 
+            currentCollection={portfolio} 
+            activePage="portfolio"
+            projectCount={projects.length}
+            portfolioCount={portfolio.length}
+        />
+
+    </WorkLayout>
+    <BlurredOverlay/>
+</BaseLayout>

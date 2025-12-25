@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+// 1. Fetch the projects collection
+const projects = await getCollection('projects');
+
+// 2. Accept ID and Class props
+const { id, class: className } = Astro.props;
+
+// 3. Calculate dynamic variables for the CSS animation
+const projectCount = projects.length;
+const duration = `${projectCount * 5}s`;
+---
+
+<div id={id} class={className}>
+    <div 
+        class="carouselWrapper" 
+        style={{
+            '--item-count': projectCount, 
+            '--duration': duration
+        }}
+    >
+        {projects.map((project, index) => (
+            <div class="carouselItem" style={{ '--i': index + 1 }}>
+                <a href={`/projects/${project.slug}`} class="block w-full h-full">
+                    {/* Comments should be outside the component props to avoid parser errors */}
+                    <Image 
+                        class="image" 
+                        src={project.data.heroImage} 
+                        alt={project.data.title}
+                    />
+                    <div class="imageText">{project.data.title}</div>
+                </a>
+            </div>
+        ))}
+    </div>
+</div>
+
+<style>
+    .carouselWrapper {
+        width: calc(100svw - 2 * min(3.8svw,7.68svh));
+        margin-inline: auto;
+        position: relative;
+        height: max(calc(0.52 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.52 * (100svh - 7.6svw) - 7.6svw));
+        overflow: hidden;
+        mask-image: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 1) 10%,
+            rgba(0, 0, 0, 1) 90%,
+            rgba(0, 0, 0, 0)
+        );
+    }
+
+    .carouselWrapper:hover .carouselItem {
+        animation-play-state: paused;
+    } 
+
+    @keyframes scrollLeft {
+        to {left: calc(-1 * var(--item-width));}
+    }
+
+    .carouselItem {
+        width: var(--item-width);
+        height: inherit;
+        position: absolute;
+        /* Logic: Place items far to the right, then scroll them left */
+        left: max(calc(var(--item-width) * var(--item-count)), 100%);
+        cursor: pointer;
+        animation: scrollLeft var(--duration) linear infinite;
+        animation-delay: calc(var(--duration) / var(--item-count) * (var(--item-count) - var(--i)) * -1);
+    }
+
+    .carouselItem .image {
+        height: inherit;
+        width: inherit;
+        object-fit: cover;
+        transition: filter ease-in-out 350ms;
+    }
+
+    .carouselItem:hover .image {
+        filter: blur(5px);
+        transition: filter ease-in-out 350ms;
+    }
+
+    .carouselItem .imageText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-wrap: nowrap;
+        z-index: 1;
+        font-size: min(1.6svw,3.224svh);
+        font-weight: 400;
+        color: var(--color-background-light); 
+        opacity: 0;
+        transition: opacity 350ms ease-in-out;
+        pointer-events: none; 
+    }
+
+    .carouselItem:hover .imageText {
+        opacity: 1;
+        transition: opacity 350ms ease-in-out;
+    }
+
+    :root {
+        --item-height: max(calc(0.52 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.52 * (100svh - 7.6svw) - 7.6svw));
+        --item-width: calc(4 / 3 * var(--item-height));
+    }
+
+    @media (max-aspect-ratio: 3.1/4) {
+        .carouselWrapper {
+            height: max(calc(0.4 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.4 * (100svh - 7.6svw) - 7.6svw));
+        }
+        .carouselItem .imageText {
+            font-size: min(3.52svw,7.0928svh);
+        }
+        :root {
+            --item-height: max(calc(0.4 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.4 * (100svh - 7.6svw) - 7.6svw));
+            --item-width: calc(3 / 4 * var(--item-height));
+        }
+    }
+</style>

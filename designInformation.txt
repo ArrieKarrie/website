@@ -1,0 +1,29 @@
+2.015:1 = standard 1920x1080 browser viewport aspect ratio
+2.01469045121 exact
+1.3 for portrait media query
+
+Squoosh image compression
+15% for landing page images, 33% for previews
+
+Colour palette: 
+https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529 
+Background, Blurred Overlay and Portfolio Gradient Overlay darkest colour, but with SAT 0 and LUM 9
+
+light
+background = #F8F9FA
+textprimary = #212529
+textsecondary = #343A40
+
+dark
+background = #171717
+textprimary = #F8F9FA
+textsecondary = #E9ECEF 
+
+imagetext
+alwayslight = #F8F9FA
+
+overlay
+alwaysdark = #171717
+
+Keyframe calculation:
+https://www.desmos.com/calculator/7murivpyag?lang=nl

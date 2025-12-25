@@ -1,0 +1,43 @@
+---
+import BlurredOverlay from "../components/BlurredOverlay.astro";
+import PaddedPage from "../layouts/PaddedPage.astro";
+---
+
+<PaddedPage>
+    <div id="homeGrid">
+        <slot/>
+    </div>
+
+    <BlurredOverlay/>
+</PaddedPage>
+
+<style is:global>
+    #homeGrid {
+        height: 100%;                       
+        width: 100%;                        
+        display: grid;                     
+        grid-template-columns: 52% 23% 25%;
+        grid-template-rows: 4% 52% 44%;
+        grid-template-areas: 
+            "name nav menuIcons"
+            "carousel carousel carousel"
+            "portfolioReel hero hero";
+    }
+
+    /* Map IDs to Grid Areas */
+    #name {grid-area: name;}
+    #nav {grid-area: nav;}
+    #menuIcons {grid-area: menuIcons;}
+    #carousel {grid-area: carousel;}
+    #portfolioReelGridContainer {grid-area: portfolioReel;}
+    #hero {grid-area: hero;}
+
+    /* Responsive Grid Changes */
+    @media (max-aspect-ratio: 3.1/4) {
+        #homeGrid {
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 4% 40% 31% 26%;
+            grid-template-areas: "name menuIcons" "carousel carousel" "hero hero" "portfolioReel portfolioReel";
+        }
+    }
+</style>

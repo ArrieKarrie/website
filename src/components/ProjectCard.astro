@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+
+const { project } = Astro.props;
+const { title, heroImage, tags } = project.data;
+const url = `/${project.collection}/${project.slug}`;
+---
+
+<div class="card-wrapper group">
+    
+    <a href={url} class="image-container">
+        <Image 
+            src={heroImage} 
+            alt={title} 
+            class="w-full h-full object-cover transition-transform duration-500"
+        />
+        <div class="imageText">{title}</div>
+    </a>
+
+    <div class="meta-row">
+        <div class="title font-normal">{title}</div>
+        <div class="tags font-normal opacity-70">
+            {tags ? tags[0] : ""}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        color: inherit;
+        min-height: 0; 
+    }
+
+    .image-container {
+        display: block; 
+        flex-grow: 1;
+        min-height: 0;
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+    }
+
+    /* BLUR EFFECT */
+    .image-container img {
+        transition: filter 350ms ease-in-out;
+    }
+    .image-container:hover img {
+        filter: blur(5px);
+    }
+
+    /* OVERLAY TEXT */
+    .imageText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-wrap: nowrap;
+        z-index: 10;
+        
+        font-size: min(1.6svw,3.224svh);
+        font-weight: 400;
+        color: white; 
+        
+        opacity: 0;
+        transition: opacity 350ms ease-in-out;
+        pointer-events: none; 
+    }
+
+    .image-container:hover .imageText {
+        opacity: 1;
+    }
+
+    .meta-row {
+        flex-shrink: 0; 
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-size: min(1svw, 2.02svh);
+        padding-top: 0.2rem;
+        cursor: default; 
+    }
+
+    @media (max-aspect-ratio: 3.1/4) {
+        .meta-row {
+            font-size: min(2.2svw,2.86svh);
+        }
+
+        .imageText {
+            font-size: min(3.52svw,7.0928svh);
+        }
+    }
+</style>

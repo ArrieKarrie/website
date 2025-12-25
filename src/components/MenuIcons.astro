@@ -1,0 +1,39 @@
+---
+import HamburgerMenu from "../components/HamburgerMenu.astro";
+---
+
+<div id="menuIcons">
+    <HamburgerMenu/>
+    <div id="lightDarkModeButton"/>
+</div>
+
+<style>
+    /* Container Styles */
+    div {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    /* Button Styles */
+    #lightDarkModeButton {
+        width: 1.3svw;
+        height: 1.3svw;
+        border-radius: 9999px;
+        background-color: var(--color-text-primary-light);
+        cursor: pointer;
+    }
+
+    /* Dark mode override using :global because .dark is usually on <body> */
+    :global(.dark) #lightDarkModeButton {
+        background-color: var(--color-text-primary-dark);
+    }
+
+    /* Mobile Resize Logic */
+    @media (max-aspect-ratio: 3.1/4) {
+        #lightDarkModeButton {
+            width: 3.5svw;
+            height: 3.5svw;
+        }
+    }
+</style>

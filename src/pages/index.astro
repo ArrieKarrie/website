@@ -1,0 +1,42 @@
+---
+// Layouts
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HomeLayout from "../layouts/HomeLayout.astro";
+
+// Components
+import Nav from "../components/Nav.astro";
+import MenuIcons from "../components/MenuIcons.astro";
+import Carousel from "../components/Carousel.astro";
+import PortfolioReel from "../components/PortfolioReel.astro";
+import Hero from "../components/Hero.astro";
+import Name from "../components/Name.astro";
+---
+
+<BaseLayout title="AvD Photography | Home">
+    
+    <HomeLayout>
+        
+        <Name/>
+        
+        <Nav/>
+
+        <MenuIcons/>
+
+        <Carousel
+            id="carousel"
+            class="col-span-3 py-[min(3.8svw,7.68svh)]"
+        />
+
+        <PortfolioReel
+            id="portfolioReelGridContainer"
+            class="flex flex-col justify-end items-start"
+        />
+
+        <Hero 
+            id="hero"
+            class="col-span-2 flex flex-col justify-end"
+        />
+
+    </HomeLayout>
+
+</BaseLayout>

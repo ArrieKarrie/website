@@ -1,0 +1,63 @@
+---
+/* src/components/Controls.astro */
+---
+<div id="controls" class="flex justify-center items-center w-full h-full relative">
+    <div class="flex items-center gap-[min(1.9svw,3.84svh)]">
+        <button id="prevBtn" class="nav-btn group" aria-label="Previous">
+            <span class="underline-anim anim-right">&larr; Prev</span>
+        </button>
+        
+        <div id="pageIndicator" class="nav-text">1 / 1</div>
+        
+        <button id="nextBtn" class="nav-btn group" aria-label="Next">
+            <span class="underline-anim anim-left">Next &rarr;</span>
+        </button>
+    </div>
+</div>
+
+<style>
+    .nav-btn, .nav-text {
+        font-size: min(1.05svw,2.121svh); 
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: inherit;
+    }
+
+    .nav-btn {
+        position: relative;
+        transition: opacity 350ms ease-in-out;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+    }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .nav-text {
+        cursor: default;
+        font-variant-numeric: tabular-nums; 
+    }
+
+    /* --- UNDERLINE ANIMATION --- */
+    .underline-anim {
+        padding-bottom: 0.15em; 
+        text-decoration: none;
+        background-image: linear-gradient(to right, currentColor, currentColor);
+        background-repeat: no-repeat;
+        background-size: 0% 1px; 
+        transition: background-size 0.35s ease-in-out;
+    }
+
+    .anim-left { background-position: 0% 100%; }
+    .anim-right { background-position: 100% 100%; }
+
+    .group:not(:disabled):hover .underline-anim {
+        background-size: 100% 1px;
+    }
+
+    @media (max-aspect-ratio: 3.1/4) {
+        .nav-btn, .nav-text {
+            font-size: min(2.2svw);
+        }
+    }
+</style>

@@ -1,0 +1,35 @@
+---
+---
+
+<a 
+	id="underlinedHyperlink" 
+	href="#" 
+	class="
+			bg-linear-to-r 
+			from-[var(--color-text-secondary-light)] 
+			to-[var(--color-text-secondary-light)] 
+			dark:from-[var(--color-text-secondary-dark)] 
+			dark:to-[var(--color-text-secondary-dark)]
+		">
+			<slot/>
+</a>
+
+<style>
+    #underlinedHyperlink{
+		padding-bottom: 1px;
+		text-decoration: none;
+		background-position-y: 100%;
+		background-repeat: no-repeat;
+		transition: background-size 0.35s ease-in-out;
+	}
+	#underlinedHyperlink {
+		background-size: 100% 1px; 
+		background-position-x: 100%;
+	}
+	#underlinedHyperlink:hover,
+	#underlinedHyperlink:focus,
+	#underlinedHyperlink:active {
+		background-size: 0% 1px;
+		background-position-x: 0%;
+	}
+</style>

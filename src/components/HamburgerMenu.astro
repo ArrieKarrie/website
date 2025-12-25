@@ -1,0 +1,70 @@
+---
+---
+
+<div id="hamburgerMenu" class="opacity-0">
+    <span class="bg-[var(--color-text-primary-light)] dark:bg-[var(--color-text-primary-dark)]"/>
+    <span class="bg-[var(--color-text-primary-light)] dark:bg-[var(--color-text-primary-dark)]"/>
+    <span class="bg-[var(--color-text-primary-light)] dark:bg-[var(--color-text-primary-dark)]"/>
+    <span class="bg-[var(--color-text-primary-light)] dark:bg-[var(--color-text-primary-dark)]"/>
+</div>
+
+<style>
+	#hamburgerMenu {
+		width: min(4svw,5.2svh);
+		height: 100%;
+		position: relative;
+		margin: min(4svw,5.2svh);
+		transform: rotate(0deg);
+		transition: .35s ease-in-out;
+		transition-property: opacity, transform;
+		pointer-events: none;
+		cursor: pointer;
+	}
+	#hamburgerMenu span {
+		display: block;
+		position: absolute;
+		height: 0.02svh;
+		width: 100%;
+		opacity: 1;
+		left: 0;
+		transform: rotate(0deg);
+		transition-property: opacity, transform;
+		transition: .35s ease-in-out;
+	}
+	:root {
+		--menuHeight: min(1.25svw,1.625svh);
+	}
+	#hamburgerMenu span:nth-child(1) {
+		top: calc(50% - var(--menuHeight) / 2);
+	}
+	#hamburgerMenu span:nth-child(4) {
+		top: calc(50% + var(--menuHeight) / 2);
+	}
+	#hamburgerMenu span:nth-child(2),
+	#hamburgerMenu span:nth-child(3) {
+		opacity: 0;
+		top: 50%;
+	}
+	#hamburgerMenu.open span:nth-child(1),
+	#hamburgerMenu.open span:nth-child(4) {
+		top: 50%;
+		width: 0%;
+		left: 50%;
+	}
+	#hamburgerMenu.open span:nth-child(2),
+	#hamburgerMenu.open span:nth-child(3) {
+		width: min(4svw,5.2svw);
+		left: 0%;
+		opacity: 1;
+	}
+	#hamburgerMenu.open span:nth-child(2) {transform: rotate(45deg);}
+	#hamburgerMenu.open span:nth-child(3) {transform: rotate(-45deg);}
+
+	@media (max-aspect-ratio: 3.1/4) {
+        #hamburgerMenu {
+			opacity: 1;
+			z-index: 10;
+			pointer-events: all;
+		}
+    }
+</style>

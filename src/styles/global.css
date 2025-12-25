@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import "tailwindcss";
+
+:root {
+    /* Global font */
+    --font-roboto: "Roboto", sans-serif;
+}
+
+/* Enable Tailwind dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Dark mode transition */
+body * {
+    @apply transition-colors duration-350 ease-in-out;
+}
+
+/* Colour scheme */
+:root {
+    --color-background-light: #F8F9FA;
+    --color-text-primary-light: #212529;
+    --color-text-secondary-light: #343A40;
+
+    --color-background-dark: #171717;
+    --color-text-primary-dark: #F8F9FA;
+    --color-text-secondary-dark: #E9ECEF ;
+}
+
+

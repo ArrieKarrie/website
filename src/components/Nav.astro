@@ -1,0 +1,56 @@
+---
+import NavLink from "../components/NavLink.astro";
+---
+
+<div id="nav">
+    <NavLink href="/">Home</NavLink>
+    <NavLink href="/about">About</NavLink>
+    <NavLink href="/projects">Work</NavLink>
+    <NavLink href="/contact">Contact</NavLink>
+</div>
+
+<style>
+    /* Default Desktop Styles */
+    div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.05svw;
+        font-weight: 500;
+        letter-spacing: 0.025em; /* tracking-wide */
+    }
+
+    /* Mobile Interaction Class (Toggled by JS) */
+    div.open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: all;
+        transition: 350ms ease-in-out;
+        transition-property: opacity;
+    }
+
+    /* Resize handler to ignore nav transition upon resizing */
+    :global(.resize-transition-stopper) div {
+        transition: none !important;
+    }
+
+    /* Mobile Layout Styles (Moved from HomeLayout) */
+    @media (max-aspect-ratio: 3.1/4) {
+        div {
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            gap: min(10svw,13svh);
+            font-size: min(10svw,13svh);
+            font-weight: 200;
+            pointer-events: none;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: 350ms ease-in-out;
+            transition-property: opacity;
+            z-index: 10;
+        }
+    }
+</style>

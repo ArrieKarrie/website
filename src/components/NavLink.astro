@@ -1,0 +1,35 @@
+---
+// Accept href to pass url to link
+const { href } = Astro.props;
+---
+
+<a 
+	id="hyperlink" 
+	href={href} 
+	class="
+		bg-linear-to-r 
+		from-[var(--color-text-secondary-light)]
+		to-[var(--color-text-secondary-light)] 
+		dark:from-[var(--color-text-secondary-dark)] 
+		dark:to-[var(--color-text-secondary-light)]
+		">
+			<slot/>
+</a>
+
+<style>
+    #hyperlink {
+		text-decoration: none;
+		background-position-y: 100%;
+		background-repeat: no-repeat;
+		transition: background-size 0.35s ease-in-out;
+        background-size: 0% 1px; 
+		background-position-x: 0%;	
+	}
+
+    #hyperlink:hover,
+	#hyperlink:focus,
+	#hyperlink:active {
+		background-size: 100% 1px;
+		background-position-x: 100%;
+	}
+</style>

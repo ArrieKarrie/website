@@ -1,0 +1,21 @@
+---
+---
+
+<div 
+    id="paddedPage" 
+    class="
+            text-[var(--color-text-secondary-light)] 
+            bg-[var(--color-background-light)] 
+            dark:bg-[var(--color-background-dark)] 
+            dark:text-[var(--color-text-secondary-dark)]
+        ">
+            <slot/>
+</div>
+
+<style>
+    #paddedPage {
+        height: 100svh;              
+        width: 100svw;                
+        padding: min(3.8svw, 7.68svh);
+    }
+</style>

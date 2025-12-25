@@ -1,0 +1,153 @@
+---
+// Layouts
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactLayout from "../layouts/ContactLayout.astro";
+
+// Components
+import Nav from "../components/Nav.astro";
+import MenuIcons from "../components/MenuIcons.astro";
+import Carousel from "../components/Carousel.astro";
+import PortfolioReel from "../components/PortfolioReel.astro";
+import Hero from "../components/Hero.astro";
+import Name from "../components/Name.astro";
+---
+
+<BaseLayout title="AvD Photography | Contact">
+    
+    <ContactLayout>
+        
+        <Name/>
+        
+        <Nav/>
+
+        <MenuIcons/>
+
+        <div id="texts">
+            <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+                <div class="category">Project inquiries</div>
+                
+                <span class="copy-trigger" data-text="armanvandijk@gmail.com">
+                    armanvandijk@gmail.com
+                </span>
+                <br/>
+                
+                <span class="copy-trigger" data-text="+31 6 31494381">
+                    +31 6 31494381
+                </span>
+            </div>
+
+            <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+                <div class="category">Social media</div>
+                
+                <a href="https://instagram.com/armanvandijk/" target="_blank" rel="noopener noreferrer" class="hover-link">
+                    Instagram
+                </a>
+                <br/>
+                <a href="https://www.linkedin.com/in/arman-van-dijk-493815184" target="_blank" rel="noopener noreferrer" class="hover-link">
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+
+    </ContactLayout>
+
+</BaseLayout>
+
+<script>
+    // Cast the NodeList to HTMLElements right away so TypeScript knows they have 'innerText'
+    const copyTriggers = document.querySelectorAll('.copy-trigger') as NodeListOf<HTMLElement>;
+
+    copyTriggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+            const textToCopy = trigger.getAttribute('data-text');
+            const originalText = trigger.getAttribute('data-text'); // Use data attribute as source of truth for original text
+
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // 1. Fade OUT
+                    trigger.classList.add('fade-out');
+
+                    // Wait for fade out (350ms), then swap text & fade IN
+                    setTimeout(() => {
+                        trigger.innerText = "Copied to clipboard";
+                        trigger.classList.remove('fade-out');
+                    }, 350);
+                    
+                    // 2. Wait 1.5s, then Fade OUT again
+                    setTimeout(() => {
+                        trigger.classList.add('fade-out');
+
+                        // Wait for fade out (200ms), then revert text & fade IN
+                        setTimeout(() => {
+                            if(originalText) trigger.innerText = originalText;
+                            trigger.classList.remove('fade-out');
+                        }, 350);
+                    }, 1850); // 350ms (first fade) + 1500ms (visible time)
+
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        });
+    });
+</script>
+
+<style>
+    .category {
+        font-weight: 500;
+        margin-bottom: 0.5em; 
+    }
+
+    #texts {
+        display: flex;
+        flex-direction: row;
+        justify-content: center; 
+        align-items: center;     
+        gap: min(3.8svw,7.68svh);    
+        
+        height: 100%;
+        width: 100%;
+        grid-area: texts;        
+    }
+
+    .text-content {
+        width: 32%; 
+        font-size: min(1svw, 2.02svh);
+        line-height: 1.6;
+        font-weight: 300;
+    }
+
+    /* Interactive Elements Styling */
+    .copy-trigger, .hover-link {
+        cursor: pointer;
+        /* Standard transition for opacity */
+        transition: opacity 0.2s ease-in-out;
+        display: inline-block; 
+        text-decoration: none;
+        color: inherit;
+        opacity: 1; /* Default visible state */
+    }
+
+    /* Fade out class toggled by JS */
+    .copy-trigger.fade-out {
+        opacity: 0;
+    }
+
+    .copy-trigger:hover, .hover-link:hover {
+        opacity: 0.6;
+    }
+
+    @media (max-aspect-ratio: 3.1/4) {
+        #texts {
+            flex-direction: column;
+            text-align: center;
+            gap: 7svw;
+        }
+        .text-content {
+            width: 100%;
+            text-align: center;
+            line-height: 2;
+            font-size: 3.2svw;
+        }
+    }
+</style>

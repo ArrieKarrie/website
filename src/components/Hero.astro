@@ -1,0 +1,84 @@
+---
+// Import component
+import UnderlinedHyperlink from "./UnderlinedHyperlink.astro";
+
+// Accept ID and Class props to allow pages to control positioning
+const { id, class: className, ...props } = Astro.props;
+---
+
+<div id={id} class={className} {...props}>
+    <div id="heroTextWrapper">
+        <div id="hero1" class="text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+            Capturing memories.
+        </div>
+
+        <div id="hero2" class="text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+            Visual storytelling.
+        </div>
+        
+        <div id="hero3">
+            Turning fleetings moments into lasting memories.
+        </div>
+    </div>
+
+    <div id="heroLink">
+        <UnderlinedHyperlink>Explore All Projects</UnderlinedHyperlink>
+        <div>(Hover/Tap and Hold)</div>
+    </div>
+</div>
+
+<style>
+    #heroTextWrapper {
+        padding-bottom: min(3.9svw, 8.1svh);
+    }
+
+    #hero1 {
+        font-size: min(5svw, 10.5svh);
+        line-height: 0;          /* /0 in tailwind */
+        font-weight: 200;        /* font-extralight */
+        letter-spacing: -0.05em; /* tracking-tighter */
+        padding-bottom: min(5.2svw, 10.2svh);
+    }
+
+    #hero2 {
+        font-size: min(5svw, 10.5svh);
+        line-height: 0;
+        font-weight: 200;
+        letter-spacing: -0.05em;
+        padding-bottom: min(5.5svw, 11.1svh);
+    }
+
+    #hero3 {
+        font-size: min(1.65svw, 3.33svh);
+        line-height: 0;
+        font-weight: 400; /* font-normal */
+        padding-bottom: min(0.6svw, 1.212svh);
+    }
+
+    #heroLink {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-weight: 400;
+        font-size: min(1svw, 2.02svh);
+    }
+    
+    @media (max-aspect-ratio: 3.1/4) {
+        /* Text resizing */
+        #hero1 {
+            font-size: min(11svw,14.3svh);
+            padding-bottom: min(11.44svw,14.872svh);
+        }
+        #hero2 {
+            font-size: min(11svw,14.3svh);
+            padding-bottom: min(12.1svw,15.73svh);
+        }
+        #hero3 {
+            font-size: min(3.63svw,4.72svh);
+            padding-bottom: min(1.32svw,1.716svh);
+        }
+        #heroLink {
+            font-size: min(2.2svw,2.86svh);
+        }
+    }
+</style>

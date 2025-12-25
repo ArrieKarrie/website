@@ -1,0 +1,99 @@
+---
+// Layouts
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AboutLayout from "../layouts/AboutLayout.astro";
+
+// Components
+import Nav from "../components/Nav.astro";
+import MenuIcons from "../components/MenuIcons.astro";
+import Carousel from "../components/Carousel.astro";
+import PortfolioReel from "../components/PortfolioReel.astro";
+import Hero from "../components/Hero.astro";
+import Name from "../components/Name.astro";
+
+// Image
+import aboutImage from "../assets/featuredImages/about.jpg"
+import Image from "astro/components/Image.astro";
+---
+
+<BaseLayout title="AvD Photography | About">
+    
+    <AboutLayout>
+        
+        <Name/>
+        
+        <Nav/>
+
+        <MenuIcons/>
+
+        <div id="texts">
+            <Image
+                class="image" 
+                src={aboutImage} 
+                alt={"Photographer standing above the crowd at a party."}
+            />
+
+            <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+                I'm a photographer who believes in the power of storytelling through images.
+                Whether it's a portrait shoot, event, or something more dynamic like sports or automotive photography,
+                I aim to capture moments that feel real and personal. I take time to connect with the people and places I photograph, 
+                listening to what matters to them, and finding out what makes each moment unique. 
+                This helps me create images that truly reflect the essence of the experience.
+                <br><br>
+                I'm always up for new challenges and love learning through fresh experiences,
+                so I welcome clients from all walks of life. My goal is to capture your story in a way that feels natural,
+                through thoughtful planning, but also by just enjoying the moment together.
+                <br><br>
+                If you're looking for photographs that go beyond the surface and tell your story, I'd love to work together.
+                Let's create something memorable!
+            </div>
+        </div>
+
+    </AboutLayout>
+
+</BaseLayout>
+
+<style>
+    #texts {
+        /* Flexbox to center content side-by-side */
+        display: flex;
+        flex-direction: row;
+        justify-content: center; /* Horizontally center the group */
+        align-items: center;     /* Vertically center the group */
+        gap: min(8.5svw,17.17svh);    /* Space between image and text */
+        
+        height: 100%;
+        width: 100%;
+        grid-area: texts;        /* Ensures it sits in the correct grid area if AboutLayout uses Grid */
+    }
+
+    .image {
+        width: min(25svw, 50.5svh);
+        height: auto;
+        object-fit: cover;
+    }
+
+    .text-content {
+        width: 32%; /* Restrict text width for readability */
+        font-size: min(1svw, 2.02svh);
+        line-height: 1.6;
+        font-weight: 300;
+    }
+
+    /* Mobile Responsive adjustment (Optional: stacks them on vertical screens) */
+    @media (max-aspect-ratio: 3.1/4) {
+        #texts {
+            flex-direction: column;
+            text-align: center;
+            gap: 5svw;
+        }
+        .image {
+            width: 50svw;
+        }
+        .text-content {
+            width: 67%;
+            text-align: left;
+            font-size: 2.2svw;
+        }
+    }
+</style>

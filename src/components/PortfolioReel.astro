@@ -1,0 +1,165 @@
+---
+// Import Astro asset and content tools
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+// Import component
+import UnderlinedHyperlink from './UnderlinedHyperlink.astro';
+
+// 1. Fetch the portfolio collection
+const portfolio = await getCollection('portfolio');
+
+// Accept ID and Class props
+const { id, class: className } = Astro.props;
+
+// 2. Dynamic Calculation Logic
+const n = portfolio.length;
+const a = 6;     // Slide duration (seconds)
+const b = 0.35;  // Transition duration (seconds)
+const t = n * a + b; // Total duration
+
+// Calculate Keyframe Percentages
+const k1 = 0;
+const k2 = (a / t) * 100;
+const k3 = ((a + b) / t) * 100;
+const k4 = ((t - 2 * b) / t) * 100;
+const k5 = ((t - b) / t) * 100;
+const k6 = 100;
+
+// Generate the Keyframes CSS string dynamically
+// NOTE: We added 'pointer-events' to ensure invisible slides don't block clicks on the visible one below them.
+const keyframesCSS = `
+@keyframes fadeInOut {
+    ${k1}% { opacity: 1; pointer-events: auto; }
+    ${k2}% { opacity: 1; pointer-events: auto; }
+    ${k3}% { opacity: 0; pointer-events: none; }
+    ${k4}% { opacity: 0; pointer-events: none; }
+    ${k5}% { opacity: 1; pointer-events: auto; }
+    ${k6}% { opacity: 1; pointer-events: auto; }
+}`;
+---
+
+<style set:html={keyframesCSS} is:global></style>
+
+<div id={id} class={className}>
+    
+    <div id="portfolioReelWrapper" class="flex flex-col justify-end items-start">
+        
+        <div 
+            id="portfolioLink"
+            class="font-normal
+            text-[min(1svw,2.02svh)]
+            from-[var(--color-text-secondary-light)] 
+            to-[var(--color-text-secondary-light)] 
+            dark:from-[var(--color-text-secondary-dark)] 
+            dark:to-[var(--color-text-secondary-dark)]
+            ">
+                <UnderlinedHyperlink href="/portfolio">Browse Portfolio</UnderlinedHyperlink>
+        </div>
+
+        <div 
+            id="portfolioReel" 
+            class="flex flex-col justify-end"
+            style={{
+                '--fade-slide-duration': `${a}s`,
+                '--fade-transition': `${b}s`,
+                '--fade-total-duration': `${t}s`
+            }}
+        >
+            {portfolio.map((item, index) => (
+                <div class="portfolioItem" style={{ '--i': n - 1 - index }}>
+                    {/* Wrap content in an anchor tag to make it clickable */}
+                    <a href={`/portfolio/${item.slug}`} class="block w-full h-full">
+                        <Image 
+                            class="image" 
+                            src={item.data.heroImage} 
+                            alt={item.data.title}
+                        />
+                        <div class="imageText">{item.data.title}</div>
+                        <div class="gradientOverlay"></div>
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</div>
+
+<style>  
+    #portfolioReelWrapper {
+        width: 20svw;
+        height: calc(20svw/1.5);
+        max-height: calc(0.33 * (100svh - 7.6svw));
+        max-width: calc(1.5 * 0.33 * (100svh - 7.6svw)) ;
+        position: relative;
+    }
+    #portfolioReel {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    .portfolioItem {
+        width: 90%;
+        height: 90%;
+        position: absolute;
+        /* Use the dynamically generated 'fadeInOut' keyframes */
+        animation: fadeInOut var(--fade-total-duration) infinite;
+        animation-delay: calc( var(--i) * var(--fade-slide-duration) );
+        cursor: pointer;
+    }
+    #portfolioReel:hover .portfolioItem {
+        animation-play-state: paused;
+    } 
+
+    .portfolioItem .image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .portfolioItem .imageText{
+        position: absolute;
+        bottom: 0; 
+        left: 0;
+        padding-left: 3.5%; 
+        padding-bottom: 1%;
+        text-wrap: nowrap;
+        z-index: 1;
+        font-size: min(1.6svw,3.224svh);
+        font-weight: 400;
+        color: var(--color-background-light); 
+        pointer-events: none; /* Text shouldn't block the link click */
+    }
+    .gradientOverlay {
+        transform: translate(0,-99%);
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(to bottom, transparent 70%, var(--color-background-dark));
+        pointer-events: none; /* Overlay shouldn't block the link click */
+    }
+
+    /* Media queries specifically for Portfolio elements */
+    @media (max-aspect-ratio: 3.1/4) {
+        #portfolioReelGridContainer {
+            align-items: end;
+        }
+        #portfolioReelWrapper {
+            height: 100%;
+            width: 67%;
+            min-width: 67%;
+            align-items: end;
+            justify-content: end;
+            flex-direction: column-reverse;
+        }
+        #portfolioReel {
+            align-items: end;
+            justify-content: center;
+        }
+        .portfolioItem .imageText{
+            padding-left: 2.5%; 
+            padding-bottom: 1%;
+            font-size: min(3.52svw,7.0928svh);
+        }
+        #portfolioLink {
+            font-size: 0;
+        }
+    }
+</style>

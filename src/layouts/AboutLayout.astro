@@ -1,0 +1,31 @@
+---
+import BlurredOverlay from "../components/BlurredOverlay.astro";
+import PaddedPage from "../layouts/PaddedPage.astro";
+---
+
+<PaddedPage>
+    <div id="aboutGrid">
+        <slot/>
+    </div>
+
+    <BlurredOverlay/>
+</PaddedPage>
+
+<style is:global>
+    #aboutGrid {
+        height: 100%;                       
+        width: 100%;                        
+        display: grid;                     
+        grid-template-columns: 52% 23% 25%;
+        grid-template-rows: 4% 96%;
+        grid-template-areas: 
+            "name nav menuIcons"
+            "texts texts texts";
+    }
+
+    /* Map IDs to Grid Areas */
+    #name {grid-area: name;}
+    #nav {grid-area: nav;}
+    #menuIcons {grid-area: menuIcons;}
+    #texts {grid-area: texts;}
+</style>

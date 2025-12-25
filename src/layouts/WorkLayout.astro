@@ -1,0 +1,33 @@
+---
+import BlurredOverlay from "../components/BlurredOverlay.astro";
+import PaddedPage from "../layouts/PaddedPage.astro";
+---
+
+<PaddedPage>
+    <div id="workGrid">
+        <slot/>
+    </div>
+
+    <BlurredOverlay/>
+</PaddedPage>
+
+<style is:global>
+    #workGrid {
+        height: 100%;                  
+        width: 100%;                   
+        display: grid;                 
+        grid-template-rows: 4% 92% 4%;
+        grid-template-columns: 52% 23% 25%;    
+        grid-template-areas: 
+            "name nav menuIcons" 
+            "texts texts texts"
+            "control control control";
+    }
+
+    /* Map IDs to Grid Areas */
+    #name { grid-area: name; }
+    #nav { grid-area: nav; }
+    #menuIcons { grid-area: menuIcons; }
+    #texts { grid-area: texts; }
+    #controls { grid-area: control; }
+</style>

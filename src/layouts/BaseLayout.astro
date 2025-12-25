@@ -1,0 +1,73 @@
+---
+import "../styles/global.css";
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	
+	<body>
+        <slot/>
+	</body>
+</html>
+
+<script>
+    // Resize handler to ignore nav transition upon resizing
+    let resizeTimer: number | undefined;
+
+    window.addEventListener("resize", () => {
+        document.body.classList.add("resize-transition-stopper");
+        
+        clearTimeout(resizeTimer);
+        
+        resizeTimer = window.setTimeout(() => {
+            document.body.classList.remove("resize-transition-stopper");
+        }, 350);
+    });
+
+    // 1. Initialize Dark Mode (Runs immediately)
+    const bodyElement = document.body;
+    if (localStorage.getItem('mode') === 'dark') {
+        bodyElement.classList.add('dark');
+    }
+
+    // 2. Event Listeners
+    // Light/Dark Toggle Logic
+    const lightDarkModeToggle = document.getElementById('lightDarkModeButton');
+
+    if (lightDarkModeToggle) {
+        lightDarkModeToggle.addEventListener('click', () => {
+            bodyElement.classList.toggle('dark');
+            const newMode = bodyElement.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('mode', newMode);
+        });
+    }
+
+    // Navigation/Hamburger Logic
+    const navIcon = document.getElementById('hamburgerMenu');
+    const navMenu = document.getElementById('nav');
+    const blurOverlay = document.getElementById('blurredOverlay');
+
+    if (navIcon) {
+        navIcon.addEventListener('click', function() {
+            navIcon.classList.toggle('open');
+            navMenu?.classList.toggle('open');
+            blurOverlay?.classList.toggle('open');
+        });
+    }
+    
+    if (blurOverlay) {
+        blurOverlay.addEventListener('click', function() {
+            navIcon?.classList.toggle('open');
+            navMenu?.classList.toggle('open');
+            blurOverlay.classList.toggle('open');
+        });
+    }
+</script>

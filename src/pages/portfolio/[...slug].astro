@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import AlbumLayout from '../../layouts/AlbumLayout.astro'; 
+
+export async function getStaticPaths() {
+  const portfolioEntries = await getCollection('portfolio');
+  
+  return portfolioEntries.map((entry: CollectionEntry<'portfolio'>) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = {
+  entry: CollectionEntry<'portfolio'>;
+};
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<AlbumLayout frontmatter={entry.data}>
+  <Content />
+</AlbumLayout>
