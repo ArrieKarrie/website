@@ -1,14 +1,15 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import BlurredOverlay from "../components/BlurredOverlay.astro";
 import PaddedPage from "../layouts/PaddedPage.astro";
 import Nav from "../components/Nav.astro";
 import MenuIcons from "../components/MenuIcons.astro";
 import Name from "../components/Name.astro";
 
-// Access the frontmatter properties passed from the markdown file
+// New Components
+import AlbumViewer from "../components/AlbumViewer.astro";
+import Lightbox from "../components/Lightbox.astro";
+
 const { frontmatter } = Astro.props; 
 const { title, heroImage, featuredImages } = frontmatter;
 ---
@@ -17,9 +18,7 @@ const { title, heroImage, featuredImages } = frontmatter;
     <PaddedPage>
         <div id="albumGrid">
             <Name/>
-            
             <Nav/>
-
             <MenuIcons/>
             
             <div id="contentWrapper"></div>
@@ -31,413 +30,32 @@ const { title, heroImage, featuredImages } = frontmatter;
                 </div>
             </div>
             
-            <div id="tip">
-                <div id="tipContent">
-                    <span 
-                        id="viewAlbumBtn" 
-                        class="
-                            cursor-pointer 
-                            bg-linear-to-r 
-                            from-[var(--color-text-secondary-light)] 
-                            to-[var(--color-text-secondary-light)] 
-                            dark:from-[var(--color-text-secondary-dark)] 
-                            dark:to-[var(--color-text-secondary-dark)]
-                        "
-                    >
-                        View album
-                    </span>
-                    
-                    <span id="scrollIndicator" class="opacity-0 pointer-events-none">
-                        (Scroll)
-                    </span>
-                </div>
-            </div>
-            
-            <Image id="heroImage" src={heroImage} alt={title} class="h-full w-full object-cover transition-elements" />
-
-            {featuredImages && (
-                <div 
-                    id="albumGallery" 
-                    class="
-                        flex flex-wrap 
-                        gap-1 
-                        h-full w-full 
-                        overflow-y-auto 
-                        hidden-initial 
-                        no-scrollbar
-                        content-start
-                    "
-                >
-                    {featuredImages.map((img: ImageMetadata, index: number) => {
-                        const aspectRatio = img.width / img.height;
-                        return (
-                            <div 
-                                id="albumImage"
-                                class="relative h-[33%] grow cursor-pointer gallery-item"
-                                style={`flex-grow: ${aspectRatio}; flex-basis: ${aspectRatio * 200}px;`}
-                                data-index={index}
-                            >
-                                <Image 
-                                    src={img} 
-                                    alt="" 
-                                    class="w-full h-full object-cover align-bottom pointer-events-none"
-                                />
-                            </div>
-                        )
-                    })}
-                    <div class="grow-[999] basis-0"></div>
-                </div>
-            )}
+            <AlbumViewer 
+                title={title} 
+                heroImage={heroImage} 
+                featuredImages={featuredImages} 
+            />
 
         </div>
 
-        <div id="lightbox">
-            
-            <div class="relative z-10 p-4 w-full h-full flex flex-col justify-center items-center pointer-events-none">
-                <img 
-                    id="lightboxImg" 
-                    src="" 
-                    alt="Lightbox View" 
-                    class="max-w-full max-h-[85vh] object-contain shadow-2xl pointer-events-auto"
-                />
-            </div>
-
-            <div class="absolute bottom-6 left-0 right-0 z-20 pointer-events-auto select-none">
-                <div id="controls" class="flex justify-center items-center w-full h-full relative text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
-                    <div class="flex items-center gap-[min(1.9svw,3.84svh)]">
-                        <button id="lbPrev" class="nav-btn group" aria-label="Previous">
-                            <span class="underline-anim anim-right">&larr; Prev</span>
-                        </button>
-                        
-                        <div id="lbCounter" class="nav-text">1 / 1</div>
-                        
-                        <button id="lbNext" class="nav-btn group" aria-label="Next">
-                            <span class="underline-anim anim-left">Next &rarr;</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <Lightbox images={featuredImages} />
 
     <BlurredOverlay/>
     </PaddedPage>
 </BaseLayout>
 
-<script define:vars={{ images: featuredImages }}>
-    // --- ELEMENTS ---
-    const viewAlbumBtn = document.getElementById('viewAlbumBtn');
-    const scrollIndicator = document.getElementById('scrollIndicator');
-    const heroImage = document.getElementById('heroImage'); 
-    const albumGallery = document.getElementById('albumGallery');
-    
-    // Lightbox Elements
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const lbPrev = document.getElementById('lbPrev');
-    const lbNext = document.getElementById('lbNext');
-    const lbCounter = document.getElementById('lbCounter');
-    
-    // Shared Elements
-    const blurredOverlay = document.getElementById('blurredOverlay');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-
-    // --- STATE ---
-    let isGalleryView = false;
-    let isAnimating = false;
-    let isLbAnimating = false;
-    let currentLbIndex = 0;
-    const totalImages = images ? images.length : 0;
-
-    // --- VIEW ALBUM / COVER TOGGLE LOGIC ---
-    if (viewAlbumBtn && heroImage && albumGallery) {
-        viewAlbumBtn.addEventListener('click', () => {
-            if (isAnimating) return; 
-            isAnimating = true;
-
-            // Fade out Button Text
-            viewAlbumBtn.classList.add('opacity-0');
-            if(scrollIndicator) scrollIndicator.classList.add('opacity-0');
-
-            if (!isGalleryView) {
-                // -> OPEN GALLERY
-                heroImage.classList.add('fade-out');
-
-                setTimeout(() => {
-                    heroImage.classList.add('is-hidden'); 
-                    albumGallery.classList.remove('hidden-initial');
-                    void albumGallery.offsetWidth;
-                    albumGallery.classList.add('fade-in');
-
-                    // Update Text & Show Scroll Hint
-                    viewAlbumBtn.innerText = "View cover";
-                    viewAlbumBtn.classList.remove('opacity-0');
-                    if(scrollIndicator) scrollIndicator.classList.remove('opacity-0');
-                    
-                    isGalleryView = true;
-                    isAnimating = false;
-                }, 350);
-
-            } else {
-                // -> CLOSE GALLERY
-                albumGallery.classList.remove('fade-in'); 
-                
-                // (Scroll text already faded out instantly above)
-
-                setTimeout(() => {
-                    albumGallery.classList.add('hidden-initial');
-                    heroImage.classList.remove('is-hidden');
-                    void heroImage.offsetWidth;
-                    heroImage.classList.remove('fade-out'); 
-
-                    viewAlbumBtn.innerText = "View album";
-                    viewAlbumBtn.classList.remove('opacity-0');
-
-                    isGalleryView = false;
-                    isAnimating = false;
-                }, 350);
-            }
-        });
-    }
-
-    // --- LIGHTBOX LOGIC ---
-
-    function updateCounter(index) {
-        if(lbCounter) lbCounter.innerText = `${index + 1} / ${totalImages}`;
-    }
-
-    function openLightbox(index) {
-        if (!lightbox || !lightboxImg) return;
-        
-        currentLbIndex = index;
-        lightboxImg.src = images[index].src;
-        updateCounter(index);
-        
-        if(blurredOverlay) {
-            blurredOverlay.classList.add('open');
-            blurredOverlay.style.zIndex = "11"; 
-        }
-        lightbox.classList.add('open');
-    }
-
-    function closeLightbox() {
-        if (!lightbox) return;
-        
-        if(blurredOverlay) blurredOverlay.classList.remove('open');
-        lightbox.classList.remove('open');
-        
-        setTimeout(() => {
-            if(lightboxImg) lightboxImg.src = "";
-            if(blurredOverlay) blurredOverlay.style.zIndex = "";
-        }, 350);
-    }
-
-    function changeImage(direction) {
-        if (isLbAnimating || !lightboxImg) return;
-        isLbAnimating = true;
-
-        lightboxImg.classList.add('opacity-0');
-
-        setTimeout(() => {
-            if (direction === 'next') {
-                currentLbIndex = (currentLbIndex + 1) >= totalImages ? 0 : currentLbIndex + 1;
-            } else {
-                currentLbIndex = (currentLbIndex - 1) < 0 ? totalImages - 1 : currentLbIndex - 1;
-            }
-
-            const newSrc = images[currentLbIndex].src;
-            updateCounter(currentLbIndex);
-
-            const tempLoader = new Image();
-            tempLoader.onload = () => {
-                lightboxImg.src = newSrc;
-                void lightboxImg.offsetWidth;
-                lightboxImg.classList.remove('opacity-0');
-                setTimeout(() => { isLbAnimating = false; }, 350);
-            };
-
-            tempLoader.onerror = () => { isLbAnimating = false; };
-            tempLoader.src = newSrc;
-        }, 350);
-    }
-
-    // Event Listeners
-    galleryItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            const index = parseInt(item.getAttribute('data-index'));
-            openLightbox(index);
-        });
-    });
-
-    if (lbPrev) lbPrev.addEventListener('click', (e) => { e.stopPropagation(); changeImage('prev'); });
-    if (lbNext) lbNext.addEventListener('click', (e) => { e.stopPropagation(); changeImage('next'); });
-
-    if (lightbox) {
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
-        });
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox || !lightbox.classList.contains('open')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') changeImage('next');
-        if (e.key === 'ArrowLeft') changeImage('prev');
-    });
-
-</script>
-
 <style is:global>
     #title {
-        font-weight: 200;        /* font-extralight */
-        letter-spacing: -0.05em; /* tracking-tighter */
+        font-weight: 200;
+        letter-spacing: -0.05em;
     }
 
     #texts {
         font-size: min(1svw, 2.02svh);
-    }
-
-    /* --- TIP LAYOUT --- */
-    #tip {
-        grid-area: tip;
+        grid-area: texts;
         position: relative;
+        z-index: 10;
     }
-
-    #tipContent {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end; 
-        height: 100%;
-        width: 50%;
-        font-weight: 400;
-        font-size: min(1svw, 2.02svh);
-    }
-
-    /* --- VIEW ALBUM BUTTON --- */
-    #viewAlbumBtn {
-        padding-bottom: 1px;
-        text-decoration: none;
-        background-position-y: 100%;
-        background-repeat: no-repeat;
-        transition: background-size 0.35s ease-in-out, opacity 350ms ease-in-out;
-        background-size: 100% 1px; 
-        background-position-x: 100%;
-        display: inline-block;
-        opacity: 1; 
-    }
-    #viewAlbumBtn.opacity-0 { opacity: 0; }
-    #viewAlbumBtn:hover, #viewAlbumBtn:focus, #viewAlbumBtn:active {
-        background-size: 0% 1px;
-        background-position-x: 0%;
-    }
-
-    /* --- SCROLL INDICATOR --- */
-    #scrollIndicator {
-        opacity: 1;
-        transition: opacity 350ms ease-in-out;
-    }
-    #scrollIndicator.opacity-0 { opacity: 0; }
-
-    /* --- LIGHTBOX CONTAINER --- */
-    #lightbox {
-        position: fixed;
-        inset: 0;
-        z-index: 50; 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        
-        transition: opacity 350ms ease-in-out, visibility 0s 350ms;
-    }
-    #lightbox.open {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        
-        transition: opacity 350ms ease-in-out, visibility 0s 0s;
-    }
-
-    /* Lightbox Image Transition */
-    #lightboxImg {
-        opacity: 1;
-        transition: opacity 350ms ease-in-out, transform 350ms ease-in-out;
-    }
-    #lightboxImg.opacity-0 { opacity: 0; }
-
-    /* --- NAV CONTROLS FADE --- */
-    #controls {
-        opacity: 0;
-        transition: opacity 350ms ease-in-out;
-    }
-    #lightbox.open #controls {
-        opacity: 1;
-    }
-
-    /* --- TRANSITIONS --- */
-    .transition-elements {
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 350ms ease-in-out, visibility 350ms ease-in-out;
-    }
-    .transition-elements.fade-out { opacity: 0; }
-    .transition-elements.is-hidden { visibility: hidden; display: none; }
-
-    /* --- ALBUM GALLERY --- */
-    #albumGallery {
-        opacity: 0;
-        transition: opacity 350ms ease-in-out;
-        grid-area: heroImage;
-        z-index: 5; 
-    }
-    .hidden-initial { visibility: hidden; display: none; }
-    .fade-in { opacity: 1 !important; }
-
-    /* --- MARGIN ADJUSTMENT (Desktop) --- */
-    #heroImage, #albumGallery {
-        margin-top: min(3.8svw, 7.68svh);
-        height: calc(100% - min(3.8svw, 7.68svh));
-    }
-
-    /* --- CONTROLS STYLING --- */
-    .nav-btn, .nav-text {
-        font-size: min(1.05svw,2.121svh); 
-        font-weight: 500;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: inherit;
-    }
-    .nav-btn {
-        position: relative;
-        transition: opacity 350ms ease-in-out;
-        cursor: pointer;
-        border: none;
-        background: transparent;
-    }
-    .nav-btn:disabled { opacity: 0.3; cursor: default; }
-    .nav-text { cursor: default; font-variant-numeric: tabular-nums; }
-
-    .underline-anim {
-        padding-bottom: 0.15em; 
-        text-decoration: none;
-        background-image: linear-gradient(to right, currentColor, currentColor);
-        background-repeat: no-repeat;
-        background-size: 0% 1px; 
-        transition: background-size 0.35s ease-in-out;
-    }
-    .anim-left { background-position: 0% 100%; }
-    .anim-right { background-position: 100% 100%; }
-    .group:not(:disabled):hover .underline-anim { background-size: 100% 1px; }
-
-    /* --- UTILITIES --- */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     /* --- GRID --- */
     #albumGrid {
@@ -450,15 +68,12 @@ const { title, heroImage, featuredImages } = frontmatter;
             "name nav menuIcons"
             "texts heroImage heroImage"
             "tip heroImage heroImage"; 
-        
         overflow: hidden; 
     }
     #name {grid-area: name;}
     #nav {grid-area: nav;}
-    #texts {grid-area: texts;}
-    #tip {grid-area: tip;}
     #menuIcons {grid-area: menuIcons;}
-    #heroImage {grid-area: heroImage;}
+    #heroImage { grid-area: heroImage; }
 
     @media (max-aspect-ratio: 3.1/4) {
         #albumGrid {
@@ -471,15 +86,11 @@ const { title, heroImage, featuredImages } = frontmatter;
                 "tip tip";
         }
 
-        #tipContent, #texts, #description {
+        #texts, #description {
             width: 100%;
         }
 
-        #tipContent, #texts {
-            font-size: 2.2svw;
-        }
-
-        #viewAlbumBtn {
+        #texts {
             font-size: 2.2svw;
         }
 
@@ -487,19 +98,5 @@ const { title, heroImage, featuredImages } = frontmatter;
             font-size: 11svw;
             padding-top: 3.8svw;
         }
-        
-        #albumGallery { grid-area: heroImage; }
-
-        #heroImage, #albumGallery {
-            margin-top: 3.8svw;
-            padding-bottom: 2.2svw;
-            height: 100%;
-        }
-
-        #albumImage {
-            height: 45%;
-        }
-
-        .nav-btn, .nav-text { font-size: min(2.2svw); }
     }
 </style>

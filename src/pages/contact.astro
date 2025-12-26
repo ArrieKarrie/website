@@ -54,40 +54,43 @@ import Name from "../components/Name.astro";
 </BaseLayout>
 
 <script>
-    // Cast the NodeList to HTMLElements right away so TypeScript knows they have 'innerText'
-    const copyTriggers = document.querySelectorAll('.copy-trigger') as NodeListOf<HTMLElement>;
+    // Runs on initial load AND after every navigation
+    document.addEventListener('astro:page-load', () => {
+        // Cast the NodeList to HTMLElements right away so TypeScript knows they have 'innerText'
+        const copyTriggers = document.querySelectorAll('.copy-trigger') as NodeListOf<HTMLElement>;
 
-    copyTriggers.forEach((trigger) => {
-        trigger.addEventListener('click', () => {
-            const textToCopy = trigger.getAttribute('data-text');
-            const originalText = trigger.getAttribute('data-text'); // Use data attribute as source of truth for original text
+        copyTriggers.forEach((trigger) => {
+            trigger.addEventListener('click', () => {
+                const textToCopy = trigger.getAttribute('data-text');
+                const originalText = trigger.getAttribute('data-text'); // Use data attribute as source of truth
 
-            if (textToCopy) {
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    // 1. Fade OUT
-                    trigger.classList.add('fade-out');
-
-                    // Wait for fade out (350ms), then swap text & fade IN
-                    setTimeout(() => {
-                        trigger.innerText = "Copied to clipboard";
-                        trigger.classList.remove('fade-out');
-                    }, 350);
-                    
-                    // 2. Wait 1.5s, then Fade OUT again
-                    setTimeout(() => {
+                if (textToCopy) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        // 1. Fade OUT
                         trigger.classList.add('fade-out');
 
-                        // Wait for fade out (200ms), then revert text & fade IN
+                        // Wait for fade out (200ms), then swap text & fade IN
                         setTimeout(() => {
-                            if(originalText) trigger.innerText = originalText;
+                            trigger.innerText = "Copied to clipboard";
                             trigger.classList.remove('fade-out');
-                        }, 350);
-                    }, 1850); // 350ms (first fade) + 1500ms (visible time)
+                        }, 200);
+                        
+                        // 2. Wait 1.5s, then Fade OUT again
+                        setTimeout(() => {
+                            trigger.classList.add('fade-out');
 
-                }).catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-            }
+                            // Wait for fade out (200ms), then revert text & fade IN
+                            setTimeout(() => {
+                                if(originalText) trigger.innerText = originalText;
+                                trigger.classList.remove('fade-out');
+                            }, 200);
+                        }, 1700); 
+
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+                }
+            });
         });
     });
 </script>

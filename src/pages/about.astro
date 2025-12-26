@@ -6,8 +6,6 @@ import AboutLayout from "../layouts/AboutLayout.astro";
 // Components
 import Nav from "../components/Nav.astro";
 import MenuIcons from "../components/MenuIcons.astro";
-import Carousel from "../components/Carousel.astro";
-import PortfolioReel from "../components/PortfolioReel.astro";
 import Hero from "../components/Hero.astro";
 import Name from "../components/Name.astro";
 
@@ -31,6 +29,7 @@ import Image from "astro/components/Image.astro";
                 class="image" 
                 src={aboutImage} 
                 alt={"Photographer standing above the crowd at a party."}
+                loading="eager" 
             />
 
             <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
@@ -44,7 +43,7 @@ import Image from "astro/components/Image.astro";
                 so I welcome clients from all walks of life. My goal is to capture your story in a way that feels natural,
                 through thoughtful planning, but also by just enjoying the moment together.
                 <br><br>
-                If you're looking for photographs that go beyond the surface and tell your story, I'd love to work together.
+                If you're looking for photographs that go beyond the surface and tell your story, I'd love to work with you.
                 Let's create something memorable!
             </div>
         </div>
@@ -60,7 +59,7 @@ import Image from "astro/components/Image.astro";
         flex-direction: row;
         justify-content: center; /* Horizontally center the group */
         align-items: center;     /* Vertically center the group */
-        gap: min(8.5svw,17.17svh);    /* Space between image and text */
+        gap: min(4svw, 60px);    /* Space between image and text */
         
         height: 100%;
         width: 100%;
@@ -68,14 +67,15 @@ import Image from "astro/components/Image.astro";
     }
 
     .image {
-        width: min(25svw, 50.5svh);
+        width: 25svw;
         height: auto;
         object-fit: cover;
     }
 
     .text-content {
-        width: 32%; /* Restrict text width for readability */
-        font-size: min(1svw, 2.02svh);
+        width: 35%; /* Restrict text width for readability */
+        text-align: justify;
+        font-size: min(1.1svw, 2vh);
         line-height: 1.6;
         font-weight: 300;
     }
@@ -85,15 +85,14 @@ import Image from "astro/components/Image.astro";
         #texts {
             flex-direction: column;
             text-align: center;
-            gap: 5svw;
         }
         .image {
-            width: 50svw;
+            width: 60svw;
         }
         .text-content {
-            width: 67%;
-            text-align: left;
-            font-size: 2.2svw;
+            width: 80%;
+            text-align: center;
+            font-size: min(3svw, 2.5vh);
         }
     }
 </style>

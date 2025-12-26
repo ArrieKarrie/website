@@ -1,0 +1,217 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+    images: ImageMetadata[]; 
+}
+
+// Correct: We only destructure 'images' from props. 
+// We do NOT look for 'frontmatter' here.
+const { images } = Astro.props;
+---
+
+<div id="lightbox">
+    <div class="relative z-10 p-4 w-full h-full flex flex-col justify-center items-center pointer-events-none">
+        <img 
+            id="lightboxImg" 
+            src="" 
+            alt="Lightbox View" 
+            class="max-w-full max-h-[85vh] object-contain shadow-2xl pointer-events-auto"
+        />
+    </div>
+
+    <div class="absolute bottom-6 left-0 right-0 z-20 pointer-events-auto select-none">
+        <div id="controls" class="flex justify-center items-center w-full h-full relative text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+            <div class="flex items-center gap-[min(1.9svw,3.84svh)]">
+                <button id="lbPrev" class="nav-btn group" aria-label="Previous">
+                    <span class="underline-anim anim-right">&larr; Prev</span>
+                </button>
+                
+                <div id="lbCounter" class="nav-text">1 / 1</div>
+                
+                <button id="lbNext" class="nav-btn group" aria-label="Next">
+                    <span class="underline-anim anim-left">Next &rarr;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script define:vars={{ images }}>
+    document.addEventListener('astro:page-load', () => {
+        // Elements
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lbPrev = document.getElementById('lbPrev');
+        const lbNext = document.getElementById('lbNext');
+        const lbCounter = document.getElementById('lbCounter');
+        const blurredOverlay = document.getElementById('blurredOverlay');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        if (!lightbox) return;
+
+        // State
+        let isLbAnimating = false;
+        let currentLbIndex = 0;
+        const totalImages = images ? images.length : 0;
+
+        // Logic
+        function updateCounter(index) {
+            if(lbCounter) lbCounter.innerText = `${index + 1} / ${totalImages}`;
+        }
+
+        function openLightbox(index) {
+            if (!lightbox || !lightboxImg) return;
+            
+            currentLbIndex = index;
+            lightboxImg.src = images[index].src;
+            updateCounter(index);
+            
+            if(blurredOverlay) {
+                blurredOverlay.classList.add('open');
+                blurredOverlay.style.zIndex = "11"; 
+            }
+            lightbox.classList.add('open');
+        }
+
+        function closeLightbox() {
+            if (!lightbox) return;
+            
+            if(blurredOverlay) blurredOverlay.classList.remove('open');
+            lightbox.classList.remove('open');
+            
+            setTimeout(() => {
+                if(lightboxImg) lightboxImg.src = "";
+                if(blurredOverlay) blurredOverlay.style.zIndex = "";
+            }, 350);
+        }
+
+        function changeImage(direction) {
+            if (isLbAnimating || !lightboxImg) return;
+            isLbAnimating = true;
+
+            lightboxImg.classList.add('opacity-0');
+
+            setTimeout(() => {
+                if (direction === 'next') {
+                    currentLbIndex = (currentLbIndex + 1) >= totalImages ? 0 : currentLbIndex + 1;
+                } else {
+                    currentLbIndex = (currentLbIndex - 1) < 0 ? totalImages - 1 : currentLbIndex - 1;
+                }
+
+                const newSrc = images[currentLbIndex].src;
+                updateCounter(currentLbIndex);
+
+                const tempLoader = new Image();
+                tempLoader.onload = () => {
+                    lightboxImg.src = newSrc;
+                    void lightboxImg.offsetWidth;
+                    lightboxImg.classList.remove('opacity-0');
+                    setTimeout(() => { isLbAnimating = false; }, 350);
+                };
+                tempLoader.onerror = () => { isLbAnimating = false; };
+                tempLoader.src = newSrc;
+            }, 350);
+        }
+
+        // Listeners
+        galleryItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const index = parseInt(item.getAttribute('data-index'));
+                openLightbox(index);
+            });
+        });
+
+        if (lbPrev) lbPrev.addEventListener('click', (e) => { e.stopPropagation(); changeImage('prev'); });
+        if (lbNext) lbNext.addEventListener('click', (e) => { e.stopPropagation(); changeImage('next'); });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Keydown handler
+        const handleKeydown = (e) => {
+            if (!lightbox.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') changeImage('next');
+            if (e.key === 'ArrowLeft') changeImage('prev');
+        };
+
+        document.addEventListener('keydown', handleKeydown);
+        
+        // Cleanup prevents memory leaks on navigation
+        document.addEventListener('astro:before-swap', () => {
+            document.removeEventListener('keydown', handleKeydown);
+        }, { once: true });
+    });
+</script>
+
+<style>
+    /* --- LIGHTBOX CONTAINER --- */
+    #lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 50; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 350ms ease-in-out, visibility 0s 350ms;
+    }
+    #lightbox.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition: opacity 350ms ease-in-out, visibility 0s 0s;
+    }
+
+    /* Lightbox Image Transition */
+    #lightboxImg {
+        opacity: 1;
+        transition: opacity 350ms ease-in-out, transform 350ms ease-in-out;
+    }
+    #lightboxImg.opacity-0 { opacity: 0; }
+
+    /* --- NAV CONTROLS FADE --- */
+    #controls {
+        opacity: 0;
+        transition: opacity 350ms ease-in-out;
+    }
+    #lightbox.open #controls { opacity: 1; }
+
+    /* --- CONTROLS STYLING --- */
+    .nav-btn, .nav-text {
+        font-size: min(1.05svw,2.121svh); 
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: inherit;
+    }
+    .nav-btn {
+        position: relative;
+        transition: opacity 350ms ease-in-out;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+    }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .nav-text { cursor: default; font-variant-numeric: tabular-nums; }
+
+    .underline-anim {
+        padding-bottom: 0.15em; 
+        text-decoration: none;
+        background-image: linear-gradient(to right, currentColor, currentColor);
+        background-repeat: no-repeat;
+        background-size: 0% 1px; 
+        transition: background-size 0.35s ease-in-out;
+    }
+    .anim-left { background-position: 0% 100%; }
+    .anim-right { background-position: 100% 100%; }
+    .group:not(:disabled):hover .underline-anim { background-size: 100% 1px; }
+
+    @media (max-aspect-ratio: 3.1/4) {
+        .nav-btn, .nav-text { font-size: min(2.2svw); }
+    }
+</style>

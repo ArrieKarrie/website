@@ -1,9 +1,9 @@
 ---
 import ProjectCard from "./ProjectCard.astro";
 import NavLink from "./NavLink.astro";
-import Controls from "./Controls.astro"; // Import the new component
+import Controls from "./Controls.astro";
+// Import the new component
 import type { CollectionEntry } from 'astro:content';
-
 interface Props {
     currentCollection: (CollectionEntry<'projects'> | CollectionEntry<'portfolio'>)[];
     activePage: string;
@@ -17,7 +17,6 @@ const {
     projectCount, 
     portfolioCount 
 } = Astro.props;
-
 const isProjectsActive = activePage === 'projects';
 ---
 
@@ -25,7 +24,8 @@ const isProjectsActive = activePage === 'projects';
     <div class="textwrapper pt-[min(5.21svw,10.5svh)] pb-[min(2.5svw)] flex flex-col items-center justify-start">
         <div id="largetext" class="flex gap-[min(0.44svw,0.8888svh)] text-[min(5svw,10.5svh)]/0 h-[min(5svw,10.5svh)] font-extralight">
             
-            {isProjectsActive ? (
+            {isProjectsActive ?
+                (
                 <div class="relative group">
                     <span class="opacity-40">Projects</span>
                 </div>
@@ -37,7 +37,8 @@ const isProjectsActive = activePage === 'projects';
             
             <div>/</div>
             
-            {!isProjectsActive ? (
+            {!isProjectsActive ?
+                (
                 <div class="relative group">
                     <span class="opacity-40">Portfolio</span>
                 </div>
@@ -53,6 +54,7 @@ const isProjectsActive = activePage === 'projects';
         <div id="projectPool" class="hidden">
             {currentCollection.map((item) => (
                 <div class="project-item-wrapper w-full h-full">
+                    
                     <ProjectCard project={item} />
                 </div>
             ))}
@@ -96,139 +98,154 @@ const isProjectsActive = activePage === 'projects';
 </style>
 
 <script>
-    const track = document.getElementById('sliderTrack');
-    const pool = document.getElementById('projectPool');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const pageIndicator = document.getElementById('pageIndicator');
-    
-    const allProjectNodes = pool ? Array.from(pool.children) : [];
-
-    let currentIndex = 0;
-    let maxIndex = 0;
-    let isAnimating = false;
-    let currentChunkSize = 0; 
-
-    const standardGap = 'gap-[min(1.9svw,3.84svh)]';
-    const doubleGap = 'gap-[min(3.8svw,7.68svh)]';
-
-    function getLayoutSettings() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const ar = width / height;
-
-        if (ar < 0.775) {
-            return { size: 6, cols: 'grid-cols-2', rows: 'grid-rows-3', gap: doubleGap };
-        }
-        if (ar < 1.1) {
-            return { size: 4, cols: 'grid-cols-2', rows: 'grid-rows-2', gap: standardGap };
-        }
-        if (ar < 1.44) {
-            return { size: 6, cols: 'grid-cols-3', rows: 'grid-rows-2', gap: standardGap };
-        }
-        if (ar < 1.69) {
-            return { size: 8, cols: 'grid-cols-4', rows: 'grid-rows-2', gap: standardGap };
-        }
-        if (ar < 1.91) {
-            return { size: 10, cols: 'grid-cols-5', rows: 'grid-rows-2', gap: standardGap };
-        }
-        if (ar < 2.35) {
-            return { size: 3, cols: 'grid-cols-3', rows: 'grid-rows-1', gap: standardGap };
-        }
-        if (ar < 2.95) {
-            return { size: 4, cols: 'grid-cols-4', rows: 'grid-rows-1', gap: standardGap };
-        }
-
-        return { size: 5, cols: 'grid-cols-5', rows: 'grid-rows-1', gap: standardGap };
-    }
-
-    function renderPages() {
-        if (!track) return;
-
-        const settings = getLayoutSettings();
-
-        if (settings.size === currentChunkSize && track.childElementCount > 0) {
-             const currentGrid = track.querySelector('.grid');
-             if (currentGrid && currentGrid.classList.contains(settings.gap.split(' ')[0])) {
-                 return;
-             }
-        }
-
-        currentChunkSize = settings.size;
+    // Runs on initial load AND after every View Transition navigation
+    document.addEventListener('astro:page-load', () => {
         
-        track.innerHTML = '';
+        // 1. Select Elements (Freshly loaded from the new DOM)
+        const track = document.getElementById('sliderTrack');
+        const pool = document.getElementById('projectPool');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
         
-        const totalItems = allProjectNodes.length;
-        const totalPages = Math.ceil(totalItems / currentChunkSize);
-        maxIndex = totalPages - 1;
+        // If track doesn't exist (we are on a page without the slider), stop here.
+        if (!track || !pool) return;
 
-        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        const allProjectNodes = Array.from(pool.children);
 
-        for (let i = 0; i < totalPages; i++) {
-            const pageDiv = document.createElement('div');
-            pageDiv.className = "slider-page flex-shrink-0 w-full h-full";
+        // 2. Initialize State
+        let currentIndex = 0;
+        let maxIndex = 0;
+        let isAnimating = false;
+        let currentChunkSize = 0; 
+
+        const standardGap = 'gap-[min(1.9svw,3.84svh)]';
+        const doubleGap = 'gap-[min(3.8svw,7.68svh)]';
+
+        function getLayoutSettings() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const ar = width / height;
+
+            if (ar < 0.775) {
+                return { size: 6, cols: 'grid-cols-2', rows: 'grid-rows-3', gap: doubleGap };
+            }
+            if (ar < 1.1) {
+                return { size: 4, cols: 'grid-cols-2', rows: 'grid-rows-2', gap: standardGap };
+            }
+            if (ar < 1.44) {
+                return { size: 6, cols: 'grid-cols-3', rows: 'grid-rows-2', gap: standardGap };
+            }
+            if (ar < 1.69) {
+                return { size: 8, cols: 'grid-cols-4', rows: 'grid-rows-2', gap: standardGap };
+            }
+            if (ar < 1.91) {
+                return { size: 10, cols: 'grid-cols-5', rows: 'grid-rows-2', gap: standardGap };
+            }
+            if (ar < 2.35) {
+                return { size: 3, cols: 'grid-cols-3', rows: 'grid-rows-1', gap: standardGap };
+            }
+            if (ar < 2.95) {
+                return { size: 4, cols: 'grid-cols-4', rows: 'grid-rows-1', gap: standardGap };
+            }
+
+            return { size: 5, cols: 'grid-cols-5', rows: 'grid-rows-1', gap: standardGap };
+        }
+
+        function renderPages() {
+            if (!track) return;
+            const settings = getLayoutSettings();
+
+            // Optimization: If layout hasn't changed, don't re-render
+            if (settings.size === currentChunkSize && track.childElementCount > 0) {
+                const currentGrid = track.querySelector('.grid');
+                if (currentGrid && currentGrid.classList.contains(settings.gap.split(' ')[0])) {
+                    return;
+                }
+            }
+
+            currentChunkSize = settings.size;
+            track.innerHTML = '';
             
-            const gridDiv = document.createElement('div');
-            gridDiv.className = `grid ${settings.cols} ${settings.rows} ${settings.gap} w-full h-full`;
+            const totalItems = allProjectNodes.length;
+            const totalPages = Math.ceil(totalItems / currentChunkSize);
+            maxIndex = totalPages - 1;
+            if (currentIndex > maxIndex) currentIndex = maxIndex;
 
-            const start = i * currentChunkSize;
-            const end = start + currentChunkSize;
-            const pageNodes = allProjectNodes.slice(start, end);
+            for (let i = 0; i < totalPages; i++) {
+                const pageDiv = document.createElement('div');
+                pageDiv.className = "slider-page flex-shrink-0 w-full h-full";
+                
+                const gridDiv = document.createElement('div');
+                gridDiv.className = `grid ${settings.cols} ${settings.rows} ${settings.gap} w-full h-full`;
+                const start = i * currentChunkSize;
+                const end = start + currentChunkSize;
+                const pageNodes = allProjectNodes.slice(start, end);
+                pageNodes.forEach(node => {
+                    gridDiv.appendChild(node);
+                });
+                pageDiv.appendChild(gridDiv);
+                track.appendChild(pageDiv);
+            }
 
-            pageNodes.forEach(node => {
-                gridDiv.appendChild(node);
-            });
-
-            pageDiv.appendChild(gridDiv);
-            track.appendChild(pageDiv);
-        }
-
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        updateButtons();
-    }
-
-    function updateButtons() {
-        if (prevBtn) (prevBtn as HTMLButtonElement).disabled = (currentIndex <= 0);
-        if (nextBtn) (nextBtn as HTMLButtonElement).disabled = (currentIndex >= maxIndex);
-
-        if (pageIndicator) {
-            const currentPage = currentIndex + 1;
-            const totalPages = maxIndex + 1;
-            pageIndicator.innerText = `${currentPage} / ${totalPages}`;
-        }
-    }
-
-    function goToPage(index: number) {
-        if (!track || isAnimating) return;
-        if (index < 0) index = 0;
-        if (index > maxIndex) index = maxIndex;
-
-        isAnimating = true;
-        track.style.opacity = '0';
-
-        setTimeout(() => {
-            currentIndex = index;
             track.style.transform = `translateX(-${currentIndex * 100}%)`;
             updateButtons();
-            track.style.opacity = '1';
-            setTimeout(() => { isAnimating = false; }, 350);
-        }, 350);
-    }
-
-    nextBtn?.addEventListener('click', () => { goToPage(currentIndex + 1); });
-    prevBtn?.addEventListener('click', () => { goToPage(currentIndex - 1); });
-
-    window.addEventListener('resize', () => {
-        const settings = getLayoutSettings();
-        const currentGrid = track?.querySelector('.grid');
-        const gapChanged = currentGrid && !currentGrid.className.includes(settings.gap);
-
-        if (settings.size !== currentChunkSize || gapChanged) {
-            renderPages();
-        } else {
-            if (track) track.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
-    });
 
-    renderPages();
+        function updateButtons() {
+            if (prevBtn) (prevBtn as HTMLButtonElement).disabled = (currentIndex <= 0);
+            if (nextBtn) (nextBtn as HTMLButtonElement).disabled = (currentIndex >= maxIndex);
+
+            if (pageIndicator) {
+                const currentPage = currentIndex + 1;
+                const totalPages = maxIndex + 1;
+                pageIndicator.innerText = `${currentPage} / ${totalPages}`;
+            }
+        }
+
+        function goToPage(index: number) {
+            if (!track || isAnimating) return;
+            if (index < 0) index = 0;
+            if (index > maxIndex) index = maxIndex;
+
+            isAnimating = true;
+            track.style.opacity = '0';
+            setTimeout(() => {
+                currentIndex = index;
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                updateButtons();
+                track.style.opacity = '1';
+                setTimeout(() => { isAnimating = false; }, 350);
+            }, 350);
+        }
+
+        // 3. Event Listeners
+        nextBtn?.addEventListener('click', () => { goToPage(currentIndex + 1); });
+        prevBtn?.addEventListener('click', () => { goToPage(currentIndex - 1); });
+
+        // Defined as a named function for cleanup
+        const handleResize = () => {
+            const settings = getLayoutSettings();
+            const currentGrid = track?.querySelector('.grid');
+            const gapChanged = currentGrid && !currentGrid.className.includes(settings.gap);
+
+            if (settings.size !== currentChunkSize || gapChanged) {
+                renderPages();
+            } else {
+                if (track) track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // 4. Initial Render
+        renderPages();
+
+        // 5. Cleanup when navigating away
+        // This removes the resize listener so they don't pile up on memory
+        document.addEventListener('astro:before-swap', () => {
+            window.removeEventListener('resize', handleResize);
+        }, { once: true });
+
+    });
 </script>

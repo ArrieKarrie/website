@@ -1,9 +1,11 @@
 ---
+// Accept href to pass url to link
+const { href } = Astro.props;
 ---
 
 <a 
 	id="underlinedHyperlink" 
-	href="#" 
+	href={href} 
 	class="
 			bg-linear-to-r 
 			from-[var(--color-text-secondary-light)] 
