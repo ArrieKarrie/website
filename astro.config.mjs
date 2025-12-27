@@ -9,5 +9,5 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   site: 'https://ArrieKarrie.github.io',
-  base: '/website',
+  base: '/website/',
 });
