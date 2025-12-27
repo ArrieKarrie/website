@@ -1,10 +1,28 @@
 ---
 title: "Wildlife"
-heroImage: "../../assets/landingInfiniteScroll/low-res/7b.webp"
+heroImage: "../../assets/heroImages/wildlife.webp"
 featuredImages:
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
+- "../../assets/featuredImages/Wildlife/12.webp"
+- "../../assets/featuredImages/Wildlife/10.webp"
+- "../../assets/featuredImages/Wildlife/13.webp"
+- "../../assets/featuredImages/Wildlife/18.webp"
+- "../../assets/featuredImages/Wildlife/19.webp"
+- "../../assets/featuredImages/Wildlife/20.webp"
+- "../../assets/featuredImages/Wildlife/21.webp"
+- "../../assets/featuredImages/Wildlife/24.webp"
+- "../../assets/featuredImages/Wildlife/25.webp"
+- "../../assets/featuredImages/Wildlife/26.webp"
+- "../../assets/featuredImages/Wildlife/82.webp"
+- "../../assets/featuredImages/Wildlife/87.webp"
+- "../../assets/featuredImages/Wildlife/107.webp"
+- "../../assets/featuredImages/Wildlife/217.webp"
+- "../../assets/featuredImages/Wildlife/117.webp"
+- "../../assets/featuredImages/Wildlife/279.webp"
+- "../../assets/featuredImages/Kruger/262.webp"
+- "../../assets/featuredImages/Kruger/260.webp"
+- "../../assets/featuredImages/Kruger/135.webp"
+- "../../assets/featuredImages/Kruger/133.webp"
+- "../../assets/featuredImages/Kruger/269.webp"
+- "../../assets/featuredImages/Kruger/271.webp"
 ---
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+There is something special about photographing animals that even makes me, a true late-working night owl, want to wake up before sunrise just to catch a glimpse of them. At the start of my photography journey, I had the luxury of being able to photograph all kinds of animals during my visit in Australia, but even the most normal birds over here in The Netherlands can get me properly excited. It's fascinating to me how close you can get to these animals using a telephoto lens, a tool that allows you to take pictures that could look as if they were taken from not more than just a few metres away. It makes you see details on animals, often especially in their eyes, that you simply couldn't with just your own eyes.

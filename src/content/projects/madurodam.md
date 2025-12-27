@@ -1,11 +1,17 @@
 ---
-title: "Madurodam"
+title: "Nuna 11S in Madurodam"
 tags: ["Automotive","Event"]
-heroImage: "../../assets/landingInfiniteScroll/low-res/1a.webp"
+heroImage: "../../assets/heroImages/madurodam.webp"
 featuredImages:
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
+- "../../assets/featuredImages/Madurodam/167.webp"
+- "../../assets/featuredImages/Madurodam/168.webp"
+- "../../assets/featuredImages/Madurodam/169.webp"
+- "../../assets/featuredImages/Madurodam/170.webp"
+- "../../assets/featuredImages/Madurodam/171.webp"
+- "../../assets/featuredImages/Madurodam/172.webp"
+- "../../assets/featuredImages/Madurodam/176.webp"
+- "../../assets/featuredImages/Madurodam/173.webp"
+- "../../assets/featuredImages/Madurodam/177.webp"
+- "../../assets/featuredImages/Madurodam/178.webp"
 ---
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Somewhere in the Scheveningen district of The Hague, a small but very iconic theme park can be found: Madurodam. For those who don't know it, Madurodam contains a wide variety of 1:25 scale models of beautiful and famous parts of the Netherlands, including the Kinderdijk, the city centre of Amsterdam and Schiphol. This makes it a popular visit for families, sightseers and miniature enthusiasts. In the summer of 2025, a cooperation between the Brunel Solar Team and Madurodam made it possible for Nuna 11S, the solar car that won the SASOL Solar Challenge in 2022, to be given its own special place in the middle of the park, between Schiphol and Amsterdam. Aside from being another fun addition to the park, the idea is also that this is yet another place where children can be inspired to take a deep dive into the world of engineering, like the many students that preceded them.

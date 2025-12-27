@@ -6,9 +6,10 @@ interface Props {
     title: string;
     heroImage: ImageMetadata;
     featuredImages: ImageMetadata[];
+    heroPosition?: string;
 }
 
-const { title, heroImage, featuredImages } = Astro.props;
+const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.props;
 ---
 
 <div id="tip">
@@ -33,85 +34,195 @@ const { title, heroImage, featuredImages } = Astro.props;
     </div>
 </div>
 
-<Image id="heroImage" src={heroImage} alt={title} class="h-full w-full object-cover transition-elements" />
+<Image 
+    id="heroImage" 
+    src={heroImage} 
+    alt={title} 
+    class="h-full w-full object-cover transition-elements" 
+    style={`object-position: ${heroPosition};`}
+/>
 
 {featuredImages && (
     <div 
         id="albumGallery" 
         class="
-            flex flex-wrap 
-            gap-1 
-            h-full w-full 
-            overflow-y-auto 
+            w-full h-full 
+            overflow-hidden
             hidden-initial 
-            no-scrollbar
-            content-start
+            cursor-grab active:cursor-grabbing
         "
     >
-        {featuredImages.map((img: ImageMetadata, index: number) => {
-            const aspectRatio = img.width / img.height;
-            return (
-                <div 
-                    id="albumImage"
-                    class="relative h-[33%] grow cursor-pointer gallery-item"
-                    style={`flex-grow: ${aspectRatio}; flex-basis: ${aspectRatio * 200}px;`}
-                    data-index={index}
-                >
-                    <Image 
-                        src={img} 
-                        alt="" 
-                        class="w-full h-full object-cover align-bottom pointer-events-none"
-                    />
-                </div>
-            )
-        })}
-        <div class="grow-[999] basis-0"></div>
+        <div id="galleryContent" class="w-full relative min-h-full">
+            {featuredImages.map((img: ImageMetadata, index: number) => {
+                const aspectRatio = img.width / img.height;
+                return (
+                    <div 
+                        class="gallery-item cursor-pointer"
+                        data-aspect-ratio={aspectRatio}
+                        data-index={index}
+                    >
+                        <Image 
+                            src={img} 
+                            alt="" 
+                            class="w-full h-full object-cover align-bottom pointer-events-none"
+                        />
+                    </div>
+                )
+            })}
+        </div>
     </div>
 )}
 
 <script>
+    import justifiedLayout from 'justified-layout';
+    import { initLenis } from '../utils/lenis';
+    import type Lenis from 'lenis'; // Import Type only
+
     document.addEventListener('astro:page-load', () => {
         const viewAlbumBtn = document.getElementById('viewAlbumBtn');
         const scrollIndicator = document.getElementById('scrollIndicator');
         const heroImage = document.getElementById('heroImage'); 
         const albumGallery = document.getElementById('albumGallery');
+        const galleryContent = document.getElementById('galleryContent');
 
+        let cachedImageElements: HTMLElement[] = [];
+        let cachedAspectRatios: number[] = [];
+        let spacer: HTMLElement | null = null;
+        let lenis: Lenis | null = null;
+
+        if (albumGallery && galleryContent) {
+            cachedImageElements = Array.from(galleryContent.querySelectorAll('.gallery-item')) as HTMLElement[];
+            cachedAspectRatios = cachedImageElements.map(el => parseFloat(el.dataset.aspectRatio || '1'));
+        }
+
+        // --- 1. JUSTIFIED LAYOUT ---
+        function calculateLayout() {
+            if (!albumGallery || !galleryContent || cachedImageElements.length === 0) return;
+            
+            const containerWidth = albumGallery.getBoundingClientRect().width;
+            if (containerWidth === 0) return; 
+
+            const targetRowHeight = window.innerWidth < 768 ? window.innerHeight * 0.20 : window.innerHeight * 0.25;
+
+            const geometry = justifiedLayout(cachedAspectRatios, {
+                containerWidth: containerWidth,
+                targetRowHeight: targetRowHeight,
+                boxSpacing: 4, 
+                containerPadding: 0
+            });
+
+            const boxes = geometry.boxes;
+            for (let i = 0; i < boxes.length; i++) {
+                const box = boxes[i];
+                const style = cachedImageElements[i].style;
+                style.width = `${box.width}px`;
+                style.height = `${box.height}px`;
+                style.transform = `translate(${box.left}px, ${box.top}px)`;
+            }
+            
+            // Spacer
+            if (!spacer) {
+                spacer = document.getElementById('gallerySpacer');
+                if (!spacer) {
+                    spacer = document.createElement('div');
+                    spacer.id = 'gallerySpacer';
+                    Object.assign(spacer.style, {
+                        position: 'absolute',
+                        width: '1px',
+                        height: '1px',
+                        left: '0',
+                        top: '0',
+                        visibility: 'hidden',
+                        pointerEvents: 'none'
+                    });
+                    galleryContent.appendChild(spacer);
+                }
+            }
+            spacer.style.transform = `translateY(${geometry.containerHeight}px)`;
+            
+            // Notify Lenis that dimensions changed
+            lenis?.resize();
+        }
+
+        // --- 2. PRELOADER ---
+        function preloadGalleryImages() {
+            if (!galleryContent) return;
+            const images = galleryContent.querySelectorAll('img');
+            images.forEach((img) => {
+                const src = img.getAttribute('src');
+                if (src) {
+                    const loader = new Image();
+                    loader.src = src;
+                }
+            });
+        }
+        if ('requestIdleCallback' in window) requestIdleCallback(() => preloadGalleryImages());
+        else setTimeout(() => preloadGalleryImages(), 2000); 
+
+        // --- 3. OBSERVERS ---
+        if (albumGallery) {
+            const resizeObserver = new ResizeObserver(() => {
+                window.requestAnimationFrame(() => calculateLayout());
+            });
+            resizeObserver.observe(albumGallery);
+
+            document.addEventListener('astro:before-swap', () => {
+                resizeObserver.disconnect();
+                lenis?.destroy();
+            }, { once: true });
+        }
+
+        // --- 4. TOGGLE + LENIS SETUP ---
         let isGalleryView = false;
         let isAnimating = false;
 
-        if (viewAlbumBtn && heroImage && albumGallery) {
+        if (viewAlbumBtn && heroImage && albumGallery && galleryContent) {
+            
+            // Init Lenis via Helper
+            lenis = initLenis({
+                wrapper: albumGallery,
+                content: galleryContent
+            });
+
+            // Toggle Click
             viewAlbumBtn.addEventListener('click', () => {
                 if (isAnimating) return; 
                 isAnimating = true;
 
-                // Fade out Button Text
                 viewAlbumBtn.classList.add('opacity-0');
                 if(scrollIndicator) scrollIndicator.classList.add('opacity-0');
 
                 if (!isGalleryView) {
-                    // -> OPEN GALLERY
+                    // -> OPEN
                     heroImage.classList.add('fade-out');
 
                     setTimeout(() => {
                         heroImage.classList.add('is-hidden'); 
                         albumGallery.classList.remove('hidden-initial');
+                        
+                        calculateLayout();
                         void albumGallery.offsetWidth;
+                        
+                        albumGallery.classList.add('is-ready');
                         albumGallery.classList.add('fade-in');
 
-                        // Update Text & Show Scroll Hint
                         viewAlbumBtn.innerText = "View cover";
                         viewAlbumBtn.classList.remove('opacity-0');
                         if(scrollIndicator) scrollIndicator.classList.remove('opacity-0');
                         
                         isGalleryView = true;
                         isAnimating = false;
+                        
+                        // Reset scroll
+                        lenis?.scrollTo(0, { immediate: true });
                     }, 350);
 
                 } else {
-                    // -> CLOSE GALLERY
+                    // -> CLOSE
                     albumGallery.classList.remove('fade-in'); 
                     
                     setTimeout(() => {
+                        albumGallery.classList.remove('is-ready');
                         albumGallery.classList.add('hidden-initial');
                         heroImage.classList.remove('is-hidden');
                         void heroImage.offsetWidth;
@@ -130,92 +241,61 @@ const { title, heroImage, featuredImages } = Astro.props;
 </script>
 
 <style>
-    /* --- TIP LAYOUT --- */
-    #tip {
-        grid-area: tip;
-        position: relative;
-        z-index: 20; 
-    }
-
-    #tipContent {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end; 
-        height: 100%;
-        width: 50%;
-        font-weight: 400;
-        font-size: min(1svw, 2.02svh);
-    }
-
-    /* --- VIEW ALBUM BUTTON --- */
-    #viewAlbumBtn {
-        padding-bottom: 1px;
-        text-decoration: none;
-        background-position-y: 100%;
-        background-repeat: no-repeat;
-        transition: background-size 0.35s ease-in-out, opacity 350ms ease-in-out;
-        background-size: 100% 1px; 
-        background-position-x: 100%;
-        display: inline-block;
-        opacity: 1; 
-    }
-    #viewAlbumBtn.opacity-0 { opacity: 0; }
-    #viewAlbumBtn:hover, #viewAlbumBtn:focus, #viewAlbumBtn:active {
-        background-size: 0% 1px;
-        background-position-x: 0%;
-    }
-
-    /* --- SCROLL INDICATOR --- */
-    #scrollIndicator {
-        opacity: 1;
-        transition: opacity 350ms ease-in-out;
-    }
-    #scrollIndicator.opacity-0 { opacity: 0; }
-
-    /* --- TRANSITIONS --- */
-    .transition-elements {
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 350ms ease-in-out, visibility 350ms ease-in-out;
-    }
-    .transition-elements.fade-out { opacity: 0; }
-    .transition-elements.is-hidden { visibility: hidden; display: none; }
-
-    /* --- ALBUM GALLERY --- */
     #albumGallery {
+        position: relative; 
         opacity: 0;
         transition: opacity 350ms ease-in-out;
         grid-area: heroImage;
         z-index: 5; 
+        overflow: hidden; 
     }
+
+    .gallery-item {
+        position: absolute; 
+        top: 0;
+        left: 0;
+        will-change: transform, width, height;
+    }
+
+    #albumGallery.is-ready .gallery-item {
+        transition: transform 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out;
+    }
+
+    /* Keep existing Layout/Tip/Button styles... */
+    #tip { grid-area: tip; position: relative; z-index: 9; }
+    #tipContent { display: flex; justify-content: space-between; align-items: flex-end; height: 100%; width: 50%; font-size: min(1svw, 2.02svh); }
+    
+    #viewAlbumBtn {
+        padding-bottom: 1px; text-decoration: none;
+        background: linear-gradient(to right, var(--color-text-secondary-light), var(--color-text-secondary-light)) no-repeat 100% 100% / 100% 1px;
+        transition: background-size 0.35s ease-in-out, opacity 350ms ease-in-out;
+        display: inline-block; opacity: 1; 
+    }
+    :global(.dark) #viewAlbumBtn {
+        background-image: linear-gradient(to right, var(--color-text-secondary-dark), var(--color-text-secondary-dark));
+    }
+    #viewAlbumBtn.opacity-0 { opacity: 0; }
+    #viewAlbumBtn:hover { background-size: 0% 1px; background-position-x: 0%; }
+
+    #scrollIndicator { opacity: 1; transition: opacity 350ms ease-in-out; }
+    #scrollIndicator.opacity-0 { opacity: 0; }
+
+    .transition-elements { opacity: 1; visibility: visible; transition: opacity 350ms ease-in-out, visibility 350ms ease-in-out; }
+    .transition-elements.fade-out { opacity: 0; }
+    .transition-elements.is-hidden { visibility: hidden; display: none; }
     .hidden-initial { visibility: hidden; display: none; }
     .fade-in { opacity: 1 !important; }
 
-    /* --- MARGIN ADJUSTMENT (Desktop) --- */
     #heroImage, #albumGallery {
         margin-top: min(3.8svw, 7.68svh);
         height: calc(100% - min(3.8svw, 7.68svh));
-        position: relative; 
-        z-index: 1;
+        position: relative; z-index: 1;
     }
-
-    /* --- UTILITIES --- */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     @media (max-aspect-ratio: 3.1/4) {
         #tipContent { width: 100%; font-size: 2.2svw; }
         #viewAlbumBtn { font-size: 2.2svw; }
-        
         #albumGallery { grid-area: heroImage; }
-
-        #heroImage, #albumGallery {
-            margin-top: 3.8svw;
-            padding-bottom: 2.2svw;
-            height: 100%;
-        }
-
-        #albumImage { height: 45%; }
+        #heroImage, #albumGallery { margin-top: 3.8svw; padding-bottom: 2.2svw; height: 100%; }
     }
 </style>

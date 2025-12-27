@@ -6,12 +6,11 @@ import Nav from "../components/Nav.astro";
 import MenuIcons from "../components/MenuIcons.astro";
 import Name from "../components/Name.astro";
 
-// New Components
 import AlbumViewer from "../components/AlbumViewer.astro";
 import Lightbox from "../components/Lightbox.astro";
 
 const { frontmatter } = Astro.props; 
-const { title, heroImage, featuredImages } = frontmatter;
+const { title, heroImage, featuredImages, heroPosition } = frontmatter;
 ---
 
 <BaseLayout title={`AvD Photography | ${title}`}>
@@ -21,19 +20,21 @@ const { title, heroImage, featuredImages } = frontmatter;
             <Nav/>
             <MenuIcons/>
             
-            <div id="contentWrapper"></div>
-
-            <div id="texts">
-                <div id="title" class="text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)] text-[min(5svw,10.5svh)] pt-[min(1.4svw,2.828svh)]">{title}</div>
-                <div id="description" class="w-[50%]">
-                    <slot/> 
+            <div id="texts" class="flex flex-col">
+                <div id="title" class="text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)] text-[min(5svw,10.5svh)] pt-[min(1.4svw,2.828svh)] shrink-0">{title}</div>
+                
+                <div id="description" class="w-[50%] grow overflow-hidden mask-fade relative cursor-grab active:cursor-grabbing">
+                    <div id="descriptionContent">
+                        <slot/> 
+                    </div>
                 </div>
             </div>
             
             <AlbumViewer 
                 title={title} 
                 heroImage={heroImage} 
-                featuredImages={featuredImages} 
+                featuredImages={featuredImages}
+                heroPosition={heroPosition} 
             />
 
         </div>
@@ -44,7 +45,26 @@ const { title, heroImage, featuredImages } = frontmatter;
     </PaddedPage>
 </BaseLayout>
 
-<style is:global>
+<script>
+    import { initLenis } from '../utils/lenis';
+
+    document.addEventListener('astro:page-load', () => {
+        const wrapper = document.getElementById('description') as HTMLElement | null;
+        const content = document.getElementById('descriptionContent') as HTMLElement | null;
+
+        if (wrapper && content) {
+            // One-line setup using the shared utility
+            const lenis = initLenis({ wrapper, content });
+
+            document.addEventListener('astro:before-swap', () => {
+                lenis.destroy();
+            }, { once: true });
+        }
+    });
+</script>
+
+<style>
+    /* --- LOCAL ELEMENTS --- */
     #title {
         font-weight: 200;
         letter-spacing: -0.05em;
@@ -54,10 +74,27 @@ const { title, heroImage, featuredImages } = frontmatter;
         font-size: min(1svw, 2.02svh);
         grid-area: texts;
         position: relative;
-        z-index: 10;
+        z-index: 5;
+        height: 100%;
+        overflow: hidden;
     }
 
-    /* --- GRID --- */
+    /* --- DESCRIPTION --- */
+    #description {
+        will-change: transform;
+    }
+
+    #descriptionContent {
+        padding-bottom: min(3.8svw, 7.68svh); 
+    }
+
+    /* The Fade Effect */
+    .mask-fade {
+        mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    }
+
+    /* --- GRID LAYOUT --- */
     #albumGrid {
         height: 100%;                       
         width: 100%;                        
@@ -70,11 +107,14 @@ const { title, heroImage, featuredImages } = frontmatter;
             "tip heroImage heroImage"; 
         overflow: hidden; 
     }
-    #name {grid-area: name;}
-    #nav {grid-area: nav;}
-    #menuIcons {grid-area: menuIcons;}
-    #heroImage { grid-area: heroImage; }
 
+    #albumGrid > :global(#name)      { grid-area: name; }
+    #albumGrid > :global(#nav)       { grid-area: nav; }
+    #albumGrid > :global(#menuIcons) { grid-area: menuIcons; }
+    #albumGrid > :global(#heroImage) { grid-area: heroImage; }
+
+
+    /* --- RESPONSIVE --- */
     @media (max-aspect-ratio: 3.1/4) {
         #albumGrid {
             grid-template-columns: 50% 50%;

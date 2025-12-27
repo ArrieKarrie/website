@@ -10,6 +10,7 @@ const { id, class: className } = Astro.props;
 
 // 3. Calculate dynamic variables for the CSS animation
 const projectCount = projects.length;
+// Optimization: Pre-calculate the duration string
 const duration = `${projectCount * 5}s`;
 ---
 
@@ -22,29 +23,60 @@ const duration = `${projectCount * 5}s`;
         }}
     >
         {projects.map((project, index) => (
-            <div class="carouselItem" style={{ '--i': index + 1 }}>
-                <a href={`/projects/${project.slug}`} class="block w-full h-full">
-                    {/* Comments should be outside the component props to avoid parser errors */}
-                    <Image 
-                        class="image" 
-                        src={project.data.heroImage} 
-                        alt={project.data.title}
-                    />
-                    <div class="imageText">{project.data.title}</div>
-                </a>
-            </div>
+            <a 
+                href={`/projects/${project.slug}`} 
+                class="carouselItem block" 
+                style={{ '--i': index + 1 }}
+            >
+                <Image 
+                    class="image" 
+                    src={project.data.heroImage} 
+                    alt={project.data.title}
+                    widths={[600, 900, 1200]}
+                    sizes="(max-width: 768px) 50vh, 66vh"
+                    loading="eager"
+                    style={`object-position: ${project.data.heroPosition || 'center'};`}
+                />
+                <div class="imageText">{project.data.title}</div>
+            </a>
         ))}
     </div>
 </div>
 
 <style>
+    /* Define complex calculations once in local variables 
+       to avoid repetition and improve readability.
+    */
+    :root {
+        /* Default (Desktop) Math */
+        --c-height-desktop: max(calc(0.52 * (100svh - 2 * 7.68svh) - 2 * 7.68svh), calc(0.52 * (100svh - 7.6svw) - 7.6svw));
+        --c-width-desktop: calc(4 / 3 * var(--c-height-desktop));
+        
+        /* Mobile Math */
+        --c-height-mobile: max(calc(0.4 * (100svh - 2 * 7.68svh) - 2 * 7.68svh), calc(0.4 * (100svh - 7.6svw) - 7.6svw));
+        --c-width-mobile: calc(3 / 4 * var(--c-height-mobile));
+    }
+
     .carouselWrapper {
-        width: calc(100svw - 2 * min(3.8svw,7.68svh));
+        /* Assign local vars based on specific component needs */
+        --item-height: var(--c-height-desktop);
+        --item-width: var(--c-width-desktop);
+
+        width: calc(100svw - 2 * min(3.8svw, 7.68svh));
         margin-inline: auto;
         position: relative;
-        height: max(calc(0.52 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.52 * (100svh - 7.6svw) - 7.6svw));
+        height: var(--item-height);
         overflow: hidden;
+        
+        /* Optimization: Gradient mask for smooth edges */
         mask-image: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 1) 10%,
+            rgba(0, 0, 0, 1) 90%,
+            rgba(0, 0, 0, 0)
+        );
+        -webkit-mask-image: linear-gradient(
             to right,
             rgba(0, 0, 0, 0),
             rgba(0, 0, 0, 1) 10%,
@@ -58,30 +90,37 @@ const duration = `${projectCount * 5}s`;
     } 
 
     @keyframes scrollLeft {
-        to {left: calc(-1 * var(--item-width));}
+        to { left: calc(-1 * var(--item-width)); }
     }
 
     .carouselItem {
         width: var(--item-width);
-        height: inherit;
+        height: 100%;
         position: absolute;
-        /* Logic: Place items far to the right, then scroll them left */
+        
+        /* Initial Position: Far right off-screen */
         left: max(calc(var(--item-width) * var(--item-count)), 100%);
+        
         cursor: pointer;
+        
+        /* Animation Logic */
         animation: scrollLeft var(--duration) linear infinite;
         animation-delay: calc(var(--duration) / var(--item-count) * (var(--item-count) - var(--i)) * -1);
+
+        /* PERFORMANCE: Hint browser to promote this to a layer */
+        will-change: left; 
     }
 
     .carouselItem .image {
-        height: inherit;
-        width: inherit;
+        height: 100%;
+        width: 100%;
         object-fit: cover;
         transition: filter ease-in-out 350ms;
+        display: block;
     }
 
     .carouselItem:hover .image {
         filter: blur(5px);
-        transition: filter ease-in-out 350ms;
     }
 
     .carouselItem .imageText {
@@ -89,9 +128,9 @@ const duration = `${projectCount * 5}s`;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        text-wrap: nowrap;
+        white-space: nowrap; /* Standard property preferred over text-wrap */
         z-index: 1;
-        font-size: min(1.6svw,3.224svh);
+        font-size: min(1.6svw, 3.224svh);
         font-weight: 400;
         color: var(--color-background-light); 
         opacity: 0;
@@ -101,24 +140,17 @@ const duration = `${projectCount * 5}s`;
 
     .carouselItem:hover .imageText {
         opacity: 1;
-        transition: opacity 350ms ease-in-out;
-    }
-
-    :root {
-        --item-height: max(calc(0.52 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.52 * (100svh - 7.6svw) - 7.6svw));
-        --item-width: calc(4 / 3 * var(--item-height));
     }
 
     @media (max-aspect-ratio: 3.1/4) {
         .carouselWrapper {
-            height: max(calc(0.4 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.4 * (100svh - 7.6svw) - 7.6svw));
+            /* Switch to Mobile sizing variables */
+            --item-height: var(--c-height-mobile);
+            --item-width: var(--c-width-mobile);
         }
+
         .carouselItem .imageText {
-            font-size: min(3.52svw,7.0928svh);
-        }
-        :root {
-            --item-height: max(calc(0.4 * (100svh - 2 * 7.68svh) - 2 * 7.68svh),calc(0.4 * (100svh - 7.6svw) - 7.6svw));
-            --item-width: calc(3 / 4 * var(--item-height));
+            font-size: min(3.52svw, 7.0928svh);
         }
     }
 </style>

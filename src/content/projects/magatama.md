@@ -1,11 +1,17 @@
 ---
 title: "Magatama"
 tags: ["Concert"]
-heroImage: "../../assets/landingInfiniteScroll/low-res/1a.webp"
+heroImage: "../../assets/featuredImages/Magatama/138.webp"
 featuredImages:
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
+- "../../assets/heroImages/magatama.webp"
+- "../../assets/featuredImages/Magatama/139.webp"
+- "../../assets/featuredImages/Magatama/140.webp"
+- "../../assets/featuredImages/Magatama/142.webp"
+- "../../assets/featuredImages/Magatama/143.webp"
+- "../../assets/featuredImages/Magatama/144.webp"
+- "../../assets/featuredImages/Magatama/145.webp"
+- "../../assets/featuredImages/Magatama/147.webp"
+- "../../assets/featuredImages/Magatama/148.webp"
+- "../../assets/featuredImages/Magatama/149.webp"
 ---
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Among the many student associations in Delft, Groover sets itself apart as one of the more unique and more recognisable ones with their music-forward jazz identity. They have a wide rotation of bands that play at various events throughout the city, one of which being Magatama; a 16-headed fusion band with all bits and bobs to create grander sounding versions of songs that you might already know. This occasion specifically was the last gig with this configuration, held at the cozy café Broeder Lazarus.

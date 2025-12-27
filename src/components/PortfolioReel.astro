@@ -26,10 +26,13 @@ const k4 = ((t - 2 * b) / t) * 100;
 const k5 = ((t - b) / t) * 100;
 const k6 = 100;
 
+// Unique animation name to prevent conflicts if multiple reels exist
+const animName = `fadeInOut-${id || 'reel'}`;
+
 // Generate the Keyframes CSS string dynamically
 // NOTE: We added 'pointer-events' to ensure invisible slides don't block clicks on the visible one below them.
 const keyframesCSS = `
-@keyframes fadeInOut {
+@keyframes ${animName} {
     ${k1}% { opacity: 1; pointer-events: auto; }
     ${k2}% { opacity: 1; pointer-events: auto; }
     ${k3}% { opacity: 0; pointer-events: none; }
@@ -63,7 +66,8 @@ const keyframesCSS = `
             style={{
                 '--fade-slide-duration': `${a}s`,
                 '--fade-transition': `${b}s`,
-                '--fade-total-duration': `${t}s`
+                '--fade-total-duration': `${t}s`,
+                '--anim-name': animName
             }}
         >
             {portfolio.map((item, index) => (
@@ -74,6 +78,10 @@ const keyframesCSS = `
                             class="image" 
                             src={item.data.heroImage} 
                             alt={item.data.title}
+                            widths={[400, 600, 800]}
+                            sizes="(max-aspect-ratio: 3.1/4) 67vw, 20vw"
+                            loading="eager"
+                            style={`object-position: ${item.data.heroPosition || 'center'};`}
                         />
                         <div class="imageText">{item.data.title}</div>
                         <div class="gradientOverlay"></div>
@@ -101,10 +109,14 @@ const keyframesCSS = `
         width: 90%;
         height: 90%;
         position: absolute;
-        /* Use the dynamically generated 'fadeInOut' keyframes */
-        animation: fadeInOut var(--fade-total-duration) infinite;
+        
+        /* Use the dynamically generated keyframes */
+        animation: var(--anim-name) var(--fade-total-duration) infinite;
         animation-delay: calc( var(--i) * var(--fade-slide-duration) );
         cursor: pointer;
+
+        /* PERFORMANCE: Hint browser to promote to layer */
+        will-change: opacity;
     }
     #portfolioReel:hover .portfolioItem {
         animation-play-state: paused;
@@ -121,7 +133,7 @@ const keyframesCSS = `
         left: 0;
         padding-left: 3.5%; 
         padding-bottom: 1%;
-        text-wrap: nowrap;
+        white-space: nowrap; /* Standard property */
         z-index: 1;
         font-size: min(1.6svw,3.224svh);
         font-weight: 400;

@@ -6,9 +6,6 @@ import ContactLayout from "../layouts/ContactLayout.astro";
 // Components
 import Nav from "../components/Nav.astro";
 import MenuIcons from "../components/MenuIcons.astro";
-import Carousel from "../components/Carousel.astro";
-import PortfolioReel from "../components/PortfolioReel.astro";
-import Hero from "../components/Hero.astro";
 import Name from "../components/Name.astro";
 ---
 
@@ -17,13 +14,11 @@ import Name from "../components/Name.astro";
     <ContactLayout>
         
         <Name/>
-        
         <Nav/>
-
         <MenuIcons/>
 
         <div id="texts">
-            <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+            <div class="text-content">
                 <div class="category">Project inquiries</div>
                 
                 <span class="copy-trigger" data-text="armanvandijk@gmail.com">
@@ -36,7 +31,7 @@ import Name from "../components/Name.astro";
                 </span>
             </div>
 
-            <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+            <div class="text-content">
                 <div class="category">Social media</div>
                 
                 <a href="https://instagram.com/armanvandijk/" target="_blank" rel="noopener noreferrer" class="hover-link">
@@ -54,32 +49,32 @@ import Name from "../components/Name.astro";
 </BaseLayout>
 
 <script>
-    // Runs on initial load AND after every navigation
     document.addEventListener('astro:page-load', () => {
-        // Cast the NodeList to HTMLElements right away so TypeScript knows they have 'innerText'
         const copyTriggers = document.querySelectorAll('.copy-trigger') as NodeListOf<HTMLElement>;
 
         copyTriggers.forEach((trigger) => {
+            // Note: We don't need to manually remove these listeners on 'astro:before-swap'
+            // because these elements are destroyed/replaced when navigating away, 
+            // so the listeners are garbage collected automatically.
             trigger.addEventListener('click', () => {
                 const textToCopy = trigger.getAttribute('data-text');
-                const originalText = trigger.getAttribute('data-text'); // Use data attribute as source of truth
+                const originalText = trigger.getAttribute('data-text'); 
 
                 if (textToCopy) {
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         // 1. Fade OUT
                         trigger.classList.add('fade-out');
 
-                        // Wait for fade out (200ms), then swap text & fade IN
+                        // 2. Swap Text & Fade IN
                         setTimeout(() => {
                             trigger.innerText = "Copied to clipboard";
                             trigger.classList.remove('fade-out');
                         }, 200);
                         
-                        // 2. Wait 1.5s, then Fade OUT again
+                        // 3. Revert after delay
                         setTimeout(() => {
                             trigger.classList.add('fade-out');
 
-                            // Wait for fade out (200ms), then revert text & fade IN
                             setTimeout(() => {
                                 if(originalText) trigger.innerText = originalText;
                                 trigger.classList.remove('fade-out');
@@ -96,17 +91,13 @@ import Name from "../components/Name.astro";
 </script>
 
 <style>
-    .category {
-        font-weight: 500;
-        margin-bottom: 0.5em; 
-    }
-
+    /* --- LAYOUT --- */
     #texts {
         display: flex;
         flex-direction: row;
         justify-content: center; 
         align-items: center;     
-        gap: min(3.8svw,7.68svh);    
+        gap: min(3.8svw, 7.68svh);    
         
         height: 100%;
         width: 100%;
@@ -118,20 +109,32 @@ import Name from "../components/Name.astro";
         font-size: min(1svw, 2.02svh);
         line-height: 1.6;
         font-weight: 300;
+
+        /* Color handling */
+        color: var(--color-text-primary-light);
+        transition: color 0.3s ease;
     }
 
-    /* Interactive Elements Styling */
+    /* Dark Mode Override */
+    :global(.dark) .text-content {
+        color: var(--color-text-primary-dark);
+    }
+
+    .category {
+        font-weight: 500;
+        margin-bottom: 0.5em; 
+    }
+
+    /* --- INTERACTIVE ELEMENTS --- */
     .copy-trigger, .hover-link {
         cursor: pointer;
-        /* Standard transition for opacity */
         transition: opacity 0.2s ease-in-out;
         display: inline-block; 
         text-decoration: none;
         color: inherit;
-        opacity: 1; /* Default visible state */
+        opacity: 1; 
     }
 
-    /* Fade out class toggled by JS */
     .copy-trigger.fade-out {
         opacity: 0;
     }
@@ -140,6 +143,7 @@ import Name from "../components/Name.astro";
         opacity: 0.6;
     }
 
+    /* --- RESPONSIVE --- */
     @media (max-aspect-ratio: 3.1/4) {
         #texts {
             flex-direction: column;

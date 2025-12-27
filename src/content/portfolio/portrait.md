@@ -1,10 +1,25 @@
 ---
 title: "Portrait"
-heroImage: "../../assets/landingInfiniteScroll/low-res/1b.webp"
+heroImage: "../../assets/heroImages/portrait.webp"
 featuredImages:
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
+- "../../assets/featuredImages/Nuna/275.webp"
+- "../../assets/featuredImages/Portraits/31.webp"
+- "../../assets/featuredImages/Portraits/83.webp"
+- "../../assets/featuredImages/Portraits/89.webp"
+- "../../assets/featuredImages/Portraits/90.webp"
+- "../../assets/featuredImages/Portraits/282.webp"
+- "../../assets/featuredImages/Portraits/195.webp"
+- "../../assets/featuredImages/Portraits/193.webp"
+- "../../assets/featuredImages/Portraits/192.webp"
+- "../../assets/featuredImages/Portraits/190.webp"
+- "../../assets/featuredImages/Portraits/188.webp"
+- "../../assets/featuredImages/Portraits/189.webp"
+- "../../assets/featuredImages/Portraits/31.webp"
+- "../../assets/featuredImages/Portraits/30.webp"
+- "../../assets/featuredImages/Portraits/15.webp"
+- "../../assets/featuredImages/Portraits/134.webp"
+- "../../assets/featuredImages/MotorThim/110.webp"
+- "../../assets/featuredImages/Manta/151.webp"
+- "../../assets/featuredImages/Manta/164.webp"
 ---
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Similarly to my love for wildlife photography, I have a great appreciation for portrait photography. Not only because of the details that it allows you to see, especially in the eyes, but also because I find immeasurable value in the short social interactions that are to be had during these shoots. Many might find having their portrait taken to be something awkward, or even daunting, but I aspire to make it a fun and, most importantly, comfortable social experience, where the end product is a series of photos that truly reflect the little quirks and characteristics of that person in the moment.

@@ -1,11 +1,21 @@
 ---
 title: "Fontainebleau"
 tags: ["Sport"]
-heroImage: "../../assets/landingInfiniteScroll/low-res/1a.webp"
+heroImage: "../../assets/heroImages/fontainebleau.webp"
+heroPosition: "50% 70%"
 featuredImages:
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
+- "../../assets/featuredImages/Fontainebleau/100.webp"
+- "../../assets/featuredImages/Fontainebleau/101.webp"
+- "../../assets/featuredImages/Fontainebleau/102.webp"
+- "../../assets/featuredImages/Fontainebleau/104.webp"
+- "../../assets/featuredImages/Fontainebleau/105.webp"
+- "../../assets/featuredImages/Fontainebleau/91.webp"
+- "../../assets/featuredImages/Fontainebleau/92.webp"
+- "../../assets/featuredImages/Fontainebleau/93.webp"
+- "../../assets/featuredImages/Fontainebleau/95.webp"
+- "../../assets/featuredImages/Fontainebleau/96.webp"
+- "../../assets/featuredImages/Fontainebleau/97.webp"
+- "../../assets/featuredImages/Fontainebleau/98.webp"
+- "../../assets/featuredImages/Fontainebleau/94.webp"
 ---
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+I might not have many vices, but I did cave in to the bouldering hype by picking up the sport in 2023 and going all-in with buying all kinds of equipment and climbing multiple times a week until my fingers got injured, which I left untreated for a year, but that's maybe a story for a different time and place. The point I wanted to share with you is that climbing on plastic holds indoors has led me to a yearly visit to Fontainebleau, the Mecca of bouldering. At an hour's drive south of Paris, a forest with several tens of thousands boulder problems spread across hundreds of sectors, which used to be training ground for French alpinists in the climbing off-season back in the early 1900s, can be found. While the rocks themselves are usually not that photogenic, the forest often offers some really beautiful light and angles.

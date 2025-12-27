@@ -11,6 +11,8 @@ const projectsCollection = defineCollection({
         featuredImages: z.array(image()).optional(),
         // It's good practice to allow a description, even if optional
         description: z.string().optional(),
+        // NEW: Allows custom cropping (e.g., "top", "center", "50% 20%")
+        heroPosition: z.string().optional(), 
     }),
 });
 
@@ -21,6 +23,8 @@ const portfolioCollection = defineCollection({
         heroImage: image(), 
         featuredImages: z.array(image()).optional(),
         description: z.string().optional(),
+        // NEW: Allows custom cropping here as well
+        heroPosition: z.string().optional(), 
     }),
 });
 

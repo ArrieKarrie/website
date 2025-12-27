@@ -6,25 +6,30 @@ const { title } = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
         <ViewTransitions />
 
         <script is:inline>
+            // 1. Immediate Theme Check (Prevents Flash of White Mode)
             const getTheme = () => localStorage.getItem('mode');
             if (getTheme() === 'dark') {
                 document.documentElement.classList.add('dark');
             }
         </script>
-	</head>
-	
-	<body>
+
+        <noscript>
+            <style>body { opacity: 1 !important; }</style>
+        </noscript>
+    </head>
+    
+    <body>
         <slot/>
-	</body>
+    </body>
 </html>
 
 <script>
@@ -37,10 +42,31 @@ const { title } = Astro.props;
         }
     }
 
-    // 3. PERSISTENCE FIX: Re-apply theme immediately after View Transition swap
+    // 3. Re-apply theme immediately after View Transition swap
     document.addEventListener('astro:after-swap', applyTheme);
 
-    // 4. Resize Handler
+    // 4. REVEAL LOGIC (Optimized & Fixed Types)
+    function revealPage() {
+        // Cast the selection to HTMLImageElement[] so TypeScript knows these are images
+        const images = Array.from(document.querySelectorAll('img:not([loading="lazy"])')) as HTMLImageElement[];
+        
+        const promises = images.filter(img => !img.complete).map(img => {
+            return new Promise((resolve) => {
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(true);
+            });
+        });
+
+        // Wait for critical images OR a snappy 200ms timeout
+        Promise.race([
+            Promise.all(promises),
+            new Promise(resolve => setTimeout(resolve, 200)) 
+        ]).then(() => {
+            document.body.classList.add('is-loaded');
+        });
+    }
+
+    // 5. Resize Handler
     let resizeTimer: number | undefined;
     window.addEventListener("resize", () => {
         document.body.classList.add("resize-transition-stopper");
@@ -50,13 +76,16 @@ const { title } = Astro.props;
         }, 350);
     });
 
-    // 5. Init Interactive Elements (Runs on load & after navigation)
+    // 6. Init Interactive Elements
     document.addEventListener('astro:page-load', () => {
         
-        // Ensure state matches (just in case)
+        // A. Trigger the fade-in logic
+        revealPage();
+
+        // B. Ensure state matches
         applyTheme();
 
-        // Light/Dark Toggle Logic
+        // C. Light/Dark Toggle Logic
         const lightDarkModeToggle = document.getElementById('lightDarkModeButton');
         if (lightDarkModeToggle) {
             lightDarkModeToggle.addEventListener('click', () => {
@@ -68,7 +97,7 @@ const { title } = Astro.props;
             });
         }
 
-        // Navigation/Hamburger Logic
+        // D. Navigation/Hamburger Logic
         const navIcon = document.getElementById('hamburgerMenu');
         const navMenu = document.getElementById('nav');
         const blurOverlay = document.getElementById('blurredOverlay');
@@ -90,3 +119,24 @@ const { title } = Astro.props;
         }
     });
 </script>
+
+<style is:global>
+    /* Prevent white flash in dark mode */
+    html {
+        background-color: var(--color-background-light);
+    }
+    html.dark {
+        background-color: var(--color-background-dark);
+    }
+
+    /* Start invisible */
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out; 
+    }
+
+    /* Fade in */
+    body.is-loaded {
+        opacity: 1;
+    }
+</style>

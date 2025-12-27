@@ -2,7 +2,8 @@
 import { Image } from 'astro:assets';
 
 const { project } = Astro.props;
-const { title, heroImage, tags } = project.data;
+// UPDATE: Destructure heroPosition from data
+const { title, heroImage, tags, heroPosition } = project.data;
 const url = `/${project.collection}/${project.slug}`;
 ---
 
@@ -13,6 +14,9 @@ const url = `/${project.collection}/${project.slug}`;
             src={heroImage} 
             alt={title} 
             class="w-full h-full object-cover transition-transform duration-500"
+            style={`object-position: ${heroPosition || 'center'};`}
+            widths={[400, 800]}
+            sizes="(max-width: 768px) 50vw, 33vw"
         />
         <div class="imageText">{title}</div>
     </a>
@@ -59,7 +63,7 @@ const url = `/${project.collection}/${project.slug}`;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        text-wrap: nowrap;
+        white-space: nowrap; /* Updated from text-wrap for better support */
         z-index: 10;
         
         font-size: min(1.6svw,3.224svh);

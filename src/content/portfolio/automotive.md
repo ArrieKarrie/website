@@ -1,18 +1,19 @@
 ---
 title: "Automotive"
-heroImage: "../../assets/landingInfiniteScroll/low-res/2a.webp"
+heroImage: "../../assets/heroImages/automotive.webp"
 featuredImages:
-- "../../assets/landingInfiniteScroll/low-res/1a.webp"
-- "../../assets/landingInfiniteScroll/low-res/2a.webp"
-- "../../assets/landingInfiniteScroll/low-res/3a.webp"
-- "../../assets/landingInfiniteScroll/low-res/4a.webp"
-- "../../assets/landingInfiniteScroll/low-res/5a.webp"
-- "../../assets/landingInfiniteScroll/low-res/6a.webp"
-- "../../assets/landingInfiniteScroll/low-res/7a.webp"
-- "../../assets/landingInfiniteScroll/low-res/8a.webp"
-- "../../assets/landingInfiniteScroll/low-res/6a.webp"
-- "../../assets/landingInfiniteScroll/low-res/7a.webp"
-- "../../assets/landingInfiniteScroll/low-res/8a.webp"
+- "../../assets/featuredImages/Nuna/166.webp"
+- "../../assets/featuredImages/Nuna/186.webp"
+- "../../assets/featuredImages/Nuna/185.webp"
+- "../../assets/featuredImages/Nuna/274.webp"
+- "../../assets/featuredImages/Nuna/2.webp"
+- "../../assets/featuredImages/Nuna/181.webp"
+- "../../assets/featuredImages/Nuna/8.webp"
+- "../../assets/featuredImages/Manta/162.webp"
+- "../../assets/featuredImages/Manta/151.webp"
+- "../../assets/featuredImages/MotorThim/109.webp"
+- "../../assets/featuredImages/MotorThim/112.webp"
+- "../../assets/featuredImages/MotorThim/114.webp"
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+My background in engineering has given me a great appreciation for anything that has wheels and goes fast. Whether it might be a rather aesthetically pleasing solar car with state-of-the-art solar cells on top of it, or a more modest internal combustion engine powered vehicle, I love them all. Give me the opportunity to take some roller shots while hanging half outside of the passenger side of a driving car, and I'll gladly take it. If you are, or know, someone with a vehicle that is dear to them, don't hesitate to reach out!

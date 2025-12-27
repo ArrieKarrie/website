@@ -6,11 +6,10 @@ import AboutLayout from "../layouts/AboutLayout.astro";
 // Components
 import Nav from "../components/Nav.astro";
 import MenuIcons from "../components/MenuIcons.astro";
-import Hero from "../components/Hero.astro";
 import Name from "../components/Name.astro";
 
 // Image
-import aboutImage from "../assets/featuredImages/about.jpg"
+import aboutImage from "../assets/featuredImages/ClubAtlas/35.webp"
 import Image from "astro/components/Image.astro";
 ---
 
@@ -19,9 +18,7 @@ import Image from "astro/components/Image.astro";
     <AboutLayout>
         
         <Name/>
-        
         <Nav/>
-
         <MenuIcons/>
 
         <div id="texts">
@@ -32,7 +29,7 @@ import Image from "astro/components/Image.astro";
                 loading="eager" 
             />
 
-            <div class="text-content text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+            <div class="text-content">
                 I'm a photographer who believes in the power of storytelling through images.
                 Whether it's a portrait shoot, event, or something more dynamic like sports or automotive photography,
                 I aim to capture moments that feel real and personal. I take time to connect with the people and places I photograph, 
@@ -54,16 +51,15 @@ import Image from "astro/components/Image.astro";
 
 <style>
     #texts {
-        /* Flexbox to center content side-by-side */
         display: flex;
         flex-direction: row;
-        justify-content: center; /* Horizontally center the group */
-        align-items: center;     /* Vertically center the group */
-        gap: min(4svw, 60px);    /* Space between image and text */
+        justify-content: center;
+        align-items: center;
+        gap: min(4svw, 60px);
         
         height: 100%;
         width: 100%;
-        grid-area: texts;        /* Ensures it sits in the correct grid area if AboutLayout uses Grid */
+        grid-area: texts;
     }
 
     .image {
@@ -73,14 +69,23 @@ import Image from "astro/components/Image.astro";
     }
 
     .text-content {
-        width: 35%; /* Restrict text width for readability */
+        width: 35%; 
         text-align: justify;
         font-size: min(1.1svw, 2vh);
         line-height: 1.6;
         font-weight: 300;
+        
+        /* Text Color Logic */
+        color: var(--color-text-primary-light);
+        transition: color 0.3s ease;
     }
 
-    /* Mobile Responsive adjustment (Optional: stacks them on vertical screens) */
+    /* Dark Mode Handling */
+    :global(.dark) .text-content {
+        color: var(--color-text-primary-dark);
+    }
+
+    /* Mobile Responsive adjustment */
     @media (max-aspect-ratio: 3.1/4) {
         #texts {
             flex-direction: column;
