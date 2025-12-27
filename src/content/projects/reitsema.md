@@ -1,6 +1,7 @@
 ---
 title: "Reitsema 21 years"
 heroImage: "../../assets/heroImages/reitsema.webp"
+description: A photo collection by Arman van Dijk covering the 21st anniversary celebration of Reitsema + Partners in Rijssen, featuring event atmosphere, decor, and festivities."
 featuredImages:
 - "../../assets/featuredImages/Reitsema/218.webp"
 - "../../assets/featuredImages/Reitsema/219.webp"

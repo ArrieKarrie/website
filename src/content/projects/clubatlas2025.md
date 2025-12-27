@@ -2,6 +2,7 @@
 title: "Club Atlas 2025"
 tags: ["Concert"]
 heroImage: "../../assets/heroImages/atlas25.webp"
+description: "Explore a photo collection by Arman van Dijk of the 2025 edition of the Club Atlas house party right in the middle of the city centre of Delft. Colourful hazy and smoky scenes, energetic crowds and spectacular performances from various artists."
 featuredImages:
 - "../../assets/featuredImages/ClubAtlas/61.webp"
 - "../../assets/featuredImages/ClubAtlas/62.webp"

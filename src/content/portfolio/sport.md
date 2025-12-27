@@ -1,6 +1,7 @@
 ---
 title: "Sport"
 heroImage: "../../assets/heroImages/sport.webp"
+description: "A photo collection of my, Arman van Dijk, favourite sport photography pictures, including a series of pictures taken during outdoor bouldering sessions in Fontainebleau." 
 featuredImages:
 - "../../assets/featuredImages/Fontainebleau/100.webp"
 - "../../assets/featuredImages/Fontainebleau/101.webp"

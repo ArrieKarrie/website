@@ -2,6 +2,7 @@
 title: "Club Atlas 2024"
 tags: ["Concert"]
 heroImage: "../../assets/heroImages/atlas24.webp"
+description: "Explore a photo collection by Arman van Dijk of the 2024 edition of the Club Atlas house party right in the middle of the city centre of Delft. Colourful hazy and smoky scenes, energetic crowds and spectacular performances from various artists."
 featuredImages:
 - "../../assets/featuredImages/ClubAtlas/129.webp"
 - "../../assets/featuredImages/ClubAtlas/128.webp"

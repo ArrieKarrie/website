@@ -1,6 +1,7 @@
 ---
 title: "Concert"
 heroImage: "../../assets/heroImages/concert.webp"
+description: "A photo collection of my, Arman van Dijk, favourite concert photography pictures, including the progressive rock band Artemis and many photos shot at the Club Atlas house party."
 featuredImages:
 - "../../assets/featuredImages/Reitsema/257.webp"
 - "../../assets/featuredImages/Reitsema/254.webp"

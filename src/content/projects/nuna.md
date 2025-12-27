@@ -2,6 +2,7 @@
 title: "Nuna"
 tags: ["Automotive","Event","Sport"]
 heroImage: "../../assets/heroImages/nuna.webp"
+description: "Explore a photo collection by Arman van Dijk of the high-performance environment that is the successful student team behind the most victorious solar car in the history of solar racing, Nuna. Experience an atmosphere of peak performance that is required to win at the world level with cut throat competition."
 featuredImages:
 - "../../assets/featuredImages/Nuna/2.webp"
 - "../../assets/featuredImages/Nuna/3.webp"

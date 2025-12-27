@@ -1,6 +1,7 @@
 ---
 title: "Automotive"
 heroImage: "../../assets/heroImages/automotive.webp"
+description: "A photo collection of my, Arman van Dijk, favourite automotive pictures, including unique shots of the solar car Nuna and a charming old Opel Manta."
 featuredImages:
 - "../../assets/featuredImages/Nuna/166.webp"
 - "../../assets/featuredImages/Nuna/186.webp"

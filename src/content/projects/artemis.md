@@ -2,6 +2,7 @@
 title: "Artemis"
 tags: ["Concert"]
 heroImage: "../../assets/heroImages/artemis.webp"
+description: "Explore a photo collection by Arman van Dijk of the progressive rock band Artemis. Raw emotions, colourful venues and energetic crowds." 
 featuredImages:
 - "../../assets/featuredImages/Artemis/42.webp"
 - "../../assets/featuredImages/Artemis/44.webp"

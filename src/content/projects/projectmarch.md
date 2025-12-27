@@ -2,6 +2,7 @@
 title: "Project March"
 tags: ["Event"]
 heroImage: "../../assets/heroImages/march.webp"
+description: "Explore a photo collection by Arman van Dijk of the Design Reveal of the tenth student team of Project MARCH, as they present their year's work, which culminates in a final demonstration of their fully autonomously functioning exoskeleton that can help paraplegics."
 heroPosition: "50% 30%"
 featuredImages:
 - "../../assets/featuredImages/ProjectMARCH/198.webp"

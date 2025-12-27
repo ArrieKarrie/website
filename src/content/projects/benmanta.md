@@ -2,6 +2,7 @@
 title: "Ben's Manta"
 tags: ["Automotive","Portrait"]
 heroImage: "../../assets/heroImages/manta.webp"
+description: "Explore a photo collection by Arman van Dijk of an old, yet very aethetically pleasing, Opel Manta taken for a spin on the Veluwe and in Vesting Naarden."
 featuredImages:
 - "../../assets/featuredImages/Manta/150.webp"
 - "../../assets/featuredImages/Manta/151.webp"

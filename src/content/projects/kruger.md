@@ -2,6 +2,7 @@
 title: "Kruger National Park"
 tags: ["Wildlife"]
 heroImage: "../../assets/heroImages/kruger.webp"
+description: "Explore a photo collection by Arman van Dijk of the most stunning South African wildlife, taken in Kruger National Park. Experience eye-to-eye contact at arm's reach of an actual lion."
 featuredImages:
 - "../../assets/featuredImages/Kruger/133.webp"
 - "../../assets/featuredImages/Kruger/135.webp"

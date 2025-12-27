@@ -1,6 +1,7 @@
 ---
 title: "Wildlife"
 heroImage: "../../assets/heroImages/wildlife.webp"
+description: "A photo collection of my, Arman van Dijk, favourite wildlife photography pictures, including pictures taken in the Australian outback and Kruger National Park in South Africa." 
 featuredImages:
 - "../../assets/featuredImages/Wildlife/12.webp"
 - "../../assets/featuredImages/Wildlife/10.webp"

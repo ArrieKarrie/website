@@ -1,6 +1,7 @@
 ---
 title: "Event"
 heroImage: "../../assets/heroImages/event.webp"
+description: "A photo collection of my, Arman van Dijk, favourite event photography pictures, including some intimate moments at the Design Reveal of the student team Project MARCH, and the company party of Reitsema + Partners." 
 featuredImages:
 - "../../assets/featuredImages/ProjectMARCH/207.webp"
 - "../../assets/featuredImages/ProjectMARCH/206.webp"

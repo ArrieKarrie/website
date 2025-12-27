@@ -2,6 +2,7 @@
 title: "Fontainebleau"
 tags: ["Sport"]
 heroImage: "../../assets/heroImages/fontainebleau.webp"
+description: "Explore a photo collection by Arman van Dijk containing a series of pictures taken during outdoor bouldering sessions in Fontainebleau. Thrilling climbs, peaceful nature and tough moves on rough rocks." 
 heroPosition: "50% 70%"
 featuredImages:
 - "../../assets/featuredImages/Fontainebleau/100.webp"

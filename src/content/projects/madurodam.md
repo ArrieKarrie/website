@@ -2,6 +2,7 @@
 title: "Nuna 11S in Madurodam"
 tags: ["Automotive","Event"]
 heroImage: "../../assets/heroImages/madurodam.webp"
+description: "Explore a photo collection by Arman van Dijk of the opening of the Nuna solar car exhibition in the miniature theme park Madurodam, featuring the championship winning Nuna 11S that won in South Africa in 2022."
 featuredImages:
 - "../../assets/featuredImages/Madurodam/167.webp"
 - "../../assets/featuredImages/Madurodam/168.webp"

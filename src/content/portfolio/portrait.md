@@ -1,6 +1,7 @@
 ---
 title: "Portrait"
 heroImage: "../../assets/heroImages/portrait.webp"
+description: "A photo collection of my, Arman van Dijk, favourite portraits, mainly including portraits of my dear friends." 
 featuredImages:
 - "../../assets/featuredImages/Nuna/275.webp"
 - "../../assets/featuredImages/Portraits/31.webp"
