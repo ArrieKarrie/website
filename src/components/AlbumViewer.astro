@@ -47,7 +47,6 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
         id="albumGallery" 
         class="
             w-full h-full 
-            overflow-hidden
             hidden-initial 
             cursor-grab active:cursor-grabbing
         "
@@ -247,6 +246,7 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
         transition: opacity 350ms ease-in-out;
         grid-area: heroImage;
         z-index: 5; 
+        /* Desktop: Hidden for Lenis */
         overflow: hidden; 
     }
 
@@ -297,5 +297,17 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
         #viewAlbumBtn { font-size: 2.2svw; }
         #albumGallery { grid-area: heroImage; }
         #heroImage, #albumGallery { margin-top: 3.8svw; padding-bottom: 2.2svw; height: 100%; }
+
+        #albumGallery {
+            overflow-y: auto;
+            grid-area: heroImage;
+            
+            /* Hide Scrollbar */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        #albumGallery::-webkit-scrollbar {
+            display: none;
+        }
     }
 </style>

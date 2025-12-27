@@ -23,7 +23,7 @@ const { title, heroImage, featuredImages, heroPosition } = frontmatter;
             <div id="texts" class="flex flex-col">
                 <div id="title" class="text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)] text-[min(5svw,10.5svh)] pt-[min(1.4svw,2.828svh)] shrink-0">{title}</div>
                 
-                <div id="description" class="w-[50%] grow overflow-hidden mask-fade relative cursor-grab active:cursor-grabbing">
+                <div id="description" class="w-[50%] grow mask-fade relative cursor-grab active:cursor-grabbing">
                     <div id="descriptionContent">
                         <slot/> 
                     </div>
@@ -53,11 +53,11 @@ const { title, heroImage, featuredImages, heroPosition } = frontmatter;
         const content = document.getElementById('descriptionContent') as HTMLElement | null;
 
         if (wrapper && content) {
-            // One-line setup using the shared utility
             const lenis = initLenis({ wrapper, content });
 
             document.addEventListener('astro:before-swap', () => {
-                lenis.destroy();
+                // FIX: Added ?. so it doesn't crash if lenis is null (on mobile)
+                lenis?.destroy();
             }, { once: true });
         }
     });
@@ -82,6 +82,8 @@ const { title, heroImage, featuredImages, heroPosition } = frontmatter;
     /* --- DESCRIPTION --- */
     #description {
         will-change: transform;
+        /* Desktop: Hide overflow for Lenis */
+        overflow: hidden; 
     }
 
     #descriptionContent {
@@ -137,6 +139,17 @@ const { title, heroImage, featuredImages, heroPosition } = frontmatter;
         #title {
             font-size: 11svw;
             padding-top: 3.8svw;
+        }
+
+        /* Mobile: Allow native scroll */
+        #description {
+            overflow-y: auto;
+            width: 100%;
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        #description::-webkit-scrollbar { 
+            display: none; 
         }
     }
 </style>
