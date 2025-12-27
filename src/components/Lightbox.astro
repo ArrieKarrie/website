@@ -2,7 +2,7 @@
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-    images: ImageMetadata[]; 
+    images: ImageMetadata[];
 }
 
 const { images } = Astro.props;
@@ -53,13 +53,10 @@ const { images } = Astro.props;
         const totalImages = images ? images.length : 0;
 
         // --- OPTIMIZATION 1: Preload Neighbors ---
-        // Quietly fetch the next and previous images so they are ready in cache
         function preloadNeighbors(index) {
             if (!images || totalImages === 0) return;
-            
             const nextIndex = (index + 1) % totalImages;
             const prevIndex = (index - 1 + totalImages) % totalImages;
-
             const imgNext = new Image(); imgNext.src = images[nextIndex].src;
             const imgPrev = new Image(); imgPrev.src = images[prevIndex].src;
         }
@@ -71,7 +68,6 @@ const { images } = Astro.props;
 
         function openLightbox(index) {
             if (!lightbox || !lightboxImg) return;
-            
             currentLbIndex = index;
             lightboxImg.src = images[index].src;
             updateCounter(index);
@@ -81,14 +77,11 @@ const { images } = Astro.props;
                 blurredOverlay.style.zIndex = "11"; 
             }
             lightbox.classList.add('open');
-            
-            // Start preloading immediately
             preloadNeighbors(index);
         }
 
         function closeLightbox() {
             if (!lightbox) return;
-            
             if(blurredOverlay) blurredOverlay.classList.remove('open');
             lightbox.classList.remove('open');
             
@@ -99,7 +92,6 @@ const { images } = Astro.props;
         }
 
         // --- OPTIMIZATION 2: Parallel Loading ---
-        // Don't wait for fade-out to finish before fetching the image. Do both at once.
         function changeImage(direction) {
             if (isLbAnimating || !lightboxImg) return;
             isLbAnimating = true;
@@ -113,15 +105,11 @@ const { images } = Astro.props;
             }
 
             // 2. Start Animation AND Image Load simultaneously
-            lightboxImg.classList.add('opacity-0'); // CSS Transition (350ms)
-            updateCounter(nextIndex); // Optimistic UI update
+            lightboxImg.classList.add('opacity-0');
+            updateCounter(nextIndex);
 
             const nextSrc = images[nextIndex].src;
-
-            // Promise 1: Wait for CSS fade out (fixed time)
             const fadePromise = new Promise(resolve => setTimeout(resolve, 350));
-
-            // Promise 2: Wait for Image to download (variable time)
             const loadPromise = new Promise(resolve => {
                 const tempLoader = new Image();
                 tempLoader.src = nextSrc;
@@ -129,7 +117,7 @@ const { images } = Astro.props;
                     resolve();
                 } else {
                     tempLoader.onload = resolve;
-                    tempLoader.onerror = resolve; // Prevent hanging on error
+                    tempLoader.onerror = resolve; 
                 }
             });
 
@@ -137,20 +125,14 @@ const { images } = Astro.props;
             Promise.all([fadePromise, loadPromise]).then(() => {
                 currentLbIndex = nextIndex;
                 lightboxImg.src = nextSrc;
-                
-                // Force a browser reflow to ensure the fade-in triggers
                 void lightboxImg.offsetWidth;
-                
                 lightboxImg.classList.remove('opacity-0');
                 isLbAnimating = false;
-
-                // Preload for the next click
                 preloadNeighbors(currentLbIndex);
             });
         }
 
         // --- OPTIMIZATION 3: Event Delegation ---
-        // Instead of adding listeners to every single image, add one to the body
         const handleGalleryClick = (e) => {
             const item = e.target.closest('.gallery-item');
             if (item) {
@@ -160,7 +142,7 @@ const { images } = Astro.props;
         };
 
         document.body.addEventListener('click', handleGalleryClick);
-
+        
         // Control Listeners
         if (lbPrev) lbPrev.addEventListener('click', (e) => { e.stopPropagation(); changeImage('prev'); });
         if (lbNext) lbNext.addEventListener('click', (e) => { e.stopPropagation(); changeImage('next'); });
@@ -178,8 +160,38 @@ const { images } = Astro.props;
         };
 
         document.addEventListener('keydown', handleKeydown);
-        
-        // Cleanup prevents memory leaks and duplicate listeners
+
+        // --- 4. SWIPE SUPPORT (New) ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50;
+
+        lightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lightbox.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            if (!lightbox.classList.contains('open')) return;
+            
+            const distance = touchStartX - touchEndX;
+
+            if (Math.abs(distance) > minSwipeDistance) {
+                if (distance > 0) {
+                    // Swiped Left -> Next Image
+                    changeImage('next');
+                } else {
+                    // Swiped Right -> Prev Image
+                    changeImage('prev');
+                }
+            }
+        }
+
+        // Cleanup
         document.addEventListener('astro:before-swap', () => {
             document.removeEventListener('keydown', handleKeydown);
             document.body.removeEventListener('click', handleGalleryClick);
@@ -200,6 +212,8 @@ const { images } = Astro.props;
         visibility: hidden;
         pointer-events: none;
         transition: opacity 350ms ease-in-out, visibility 0s 350ms;
+        /* Prevent scrolling the body while swiping on mobile */
+        touch-action: none; 
     }
     #lightbox.open {
         opacity: 1;
@@ -229,7 +243,7 @@ const { images } = Astro.props;
 
     /* --- CONTROLS STYLING --- */
     .nav-btn, .nav-text {
-        font-size: min(1.05svw,2.121svh); 
+        font-size: min(1.05svw,2.121svh);
         font-weight: 500;
         letter-spacing: 0.15em;
         text-transform: uppercase;

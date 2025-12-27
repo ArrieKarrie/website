@@ -4,7 +4,6 @@ import NavLink from "./NavLink.astro";
 import Controls from "./Controls.astro";
 // Import the new component
 import type { CollectionEntry } from 'astro:content';
-
 interface Props {
     currentCollection: (CollectionEntry<'projects'> | CollectionEntry<'portfolio'>)[];
     activePage: string;
@@ -26,7 +25,7 @@ const isProjectsActive = activePage === 'projects';
         <div id="largetext" class="flex gap-[min(0.44svw,0.8888svh)] text-[min(5svw,10.5svh)]/0 h-[min(5svw,10.5svh)] font-extralight">
             
             {isProjectsActive ?
-                (
+            (
                 <div class="relative group">
                     <span class="opacity-40">Projects</span>
                 </div>
@@ -39,7 +38,7 @@ const isProjectsActive = activePage === 'projects';
             <div>/</div>
             
             {!isProjectsActive ?
-                (
+            (
                 <div class="relative group">
                     <span class="opacity-40">Portfolio</span>
                 </div>
@@ -51,7 +50,7 @@ const isProjectsActive = activePage === 'projects';
         </div>
     </div>
 
-    <div class="slider relative flex-grow flex flex-col justify-center w-full overflow-hidden pb-[min(1.9svw,3.84svh)]">
+    <div class="slider relative flex-grow flex flex-col justify-center w-full overflow-hidden pb-[min(1.9svw,3.84svh)] touch-pan-y">
         <div id="projectPool" class="hidden">
             {currentCollection.map((item) => (
                 <div class="project-item-wrapper w-full h-full">
@@ -60,7 +59,7 @@ const isProjectsActive = activePage === 'projects';
                 </div>
             ))}
         </div>
-        <div id="sliderTrack" class="flex w-full h-full"></div>
+        <div id="sliderTrack" class="flex w-full h-full cursor-grab active:cursor-grabbing"></div>
     </div>
 </div>
 
@@ -171,6 +170,7 @@ const isProjectsActive = activePage === 'projects';
             const totalItems = allProjectNodes.length;
             const totalPages = Math.ceil(totalItems / currentChunkSize);
             maxIndex = totalPages - 1;
+
             if (currentIndex > maxIndex) currentIndex = maxIndex;
 
             for (let i = 0; i < totalPages; i++) {
@@ -179,12 +179,15 @@ const isProjectsActive = activePage === 'projects';
                 
                 const gridDiv = document.createElement('div');
                 gridDiv.className = `grid ${settings.cols} ${settings.rows} ${settings.gap} w-full h-full`;
+
                 const start = i * currentChunkSize;
                 const end = start + currentChunkSize;
                 const pageNodes = allProjectNodes.slice(start, end);
+
                 pageNodes.forEach(node => {
                     gridDiv.appendChild(node);
                 });
+
                 pageDiv.appendChild(gridDiv);
                 track.appendChild(pageDiv);
             }
@@ -220,11 +223,11 @@ const isProjectsActive = activePage === 'projects';
             }, 350);
         }
 
-        // 3. Event Listeners
+        // 3. Event Listeners (Buttons)
         nextBtn?.addEventListener('click', () => { goToPage(currentIndex + 1); });
         prevBtn?.addEventListener('click', () => { goToPage(currentIndex - 1); });
 
-        // Defined as a named function for cleanup
+        // 4. Resize Listener
         const handleResize = () => {
             const settings = getLayoutSettings();
             const currentGrid = track?.querySelector('.grid');
@@ -239,14 +242,41 @@ const isProjectsActive = activePage === 'projects';
 
         window.addEventListener('resize', handleResize);
 
-        // 4. Initial Render
+        // 5. Initial Render
         renderPages();
 
-        // 5. Cleanup when navigating away
-        // This removes the resize listener so they don't pile up on memory
+        // 6. Swipe Support (Mobile)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50; // Minimum pixel distance to count as a swipe
+
+        track.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        track.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            // Calculate distance
+            const distance = touchStartX - touchEndX;
+
+            if (Math.abs(distance) > minSwipeDistance) {
+                if (distance > 0) {
+                    // Swiped Left -> Go Next
+                    goToPage(currentIndex + 1);
+                } else {
+                    // Swiped Right -> Go Prev
+                    goToPage(currentIndex - 1);
+                }
+            }
+        }
+
+        // 7. Cleanup
         document.addEventListener('astro:before-swap', () => {
             window.removeEventListener('resize', handleResize);
         }, { once: true });
-
     });
 </script>

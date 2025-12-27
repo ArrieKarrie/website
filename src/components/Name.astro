@@ -1,21 +1,27 @@
 ---
+import NavLink from "./NavLink.astro";
+
+// Use the base URL for the home link (handles GitHub Pages subpath)
+const home = import.meta.env.BASE_URL;
 ---
 
-<div id="name">Arman</div>
+<div id="name">
+    <NavLink href={home}>Arman</NavLink>
+</div>
 
 <style>
     #name {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		font-size: 1.5svw;
-		font-weight: 200;              /* font-extralight */
-		letter-spacing: 0.025em;       /* tracking-wide */
-	}
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 1.5svw;
+        font-weight: 200;              /* font-extralight */
+        letter-spacing: 0.025em;       /* tracking-wide */
+    }
 
     @media (max-aspect-ratio: 3.1/4) {
-		#name {
-			font-size: 3.5svw;
-		}
+        #name {
+            font-size: 3.5svw;
+        }
     }
 </style>
