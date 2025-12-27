@@ -4,7 +4,9 @@ import { Image } from 'astro:assets';
 const { project } = Astro.props;
 // UPDATE: Destructure heroPosition from data
 const { title, heroImage, tags, heroPosition } = project.data;
-const url = `/${project.collection}/${project.slug}`;
+// FIX: Prepend BASE_URL. 
+// We ensure we don't end up with double slashes by not adding one before collection.
+const url = `${import.meta.env.BASE_URL}${project.collection}/${project.slug}`;
 ---
 
 <div class="card-wrapper group">

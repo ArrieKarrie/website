@@ -3,6 +3,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
+
 // Import component
 import UnderlinedHyperlink from './UnderlinedHyperlink.astro';
 
@@ -57,7 +58,9 @@ const keyframesCSS = `
             dark:from-[var(--color-text-secondary-dark)] 
             dark:to-[var(--color-text-secondary-dark)]
             ">
-                <UnderlinedHyperlink href="/portfolio">Browse Portfolio</UnderlinedHyperlink>
+                <UnderlinedHyperlink href={import.meta.env.BASE_URL + "portfolio"}>
+                    Browse Portfolio
+                </UnderlinedHyperlink>
         </div>
 
         <div 
@@ -73,7 +76,7 @@ const keyframesCSS = `
             {portfolio.map((item, index) => (
                 <div class="portfolioItem" style={{ '--i': n - 1 - index }}>
                     {/* Wrap content in an anchor tag to make it clickable */}
-                    <a href={`/portfolio/${item.slug}`} class="block w-full h-full">
+                    <a href={`${import.meta.env.BASE_URL}portfolio/${item.slug}`} class="block w-full h-full">
                         <Image 
                             class="image" 
                             src={item.data.heroImage} 

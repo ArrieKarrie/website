@@ -22,7 +22,9 @@ const { id, class: className, ...props } = Astro.props;
     </div>
 
     <div id="heroLink">
-        <UnderlinedHyperlink href="/projects">Explore All Projects</UnderlinedHyperlink>
+        <UnderlinedHyperlink href={import.meta.env.BASE_URL + "projects"}>
+            Explore All Projects
+        </UnderlinedHyperlink>
         <div>(Hover/Tap and Hold)</div>
     </div>
 </div>

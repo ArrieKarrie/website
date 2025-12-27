@@ -1,12 +1,13 @@
 ---
 import NavLink from "../components/NavLink.astro";
+const home = import.meta.env.BASE_URL;
 ---
 
 <div id="nav">
-    <NavLink href="/">Home</NavLink>
-    <NavLink href="/about">About</NavLink>
-    <NavLink href="/projects">Work</NavLink>
-    <NavLink href="/contact">Contact</NavLink>
+    <NavLink href={home}>Home</NavLink>
+    <NavLink href={home + "about"}>About</NavLink>
+    <NavLink href={home + "projects"}>Work</NavLink>
+    <NavLink href={home + "contact"}>Contact</NavLink>
 </div>
 
 <style>

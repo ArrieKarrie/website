@@ -4,6 +4,7 @@ import NavLink from "./NavLink.astro";
 import Controls from "./Controls.astro";
 // Import the new component
 import type { CollectionEntry } from 'astro:content';
+
 interface Props {
     currentCollection: (CollectionEntry<'projects'> | CollectionEntry<'portfolio'>)[];
     activePage: string;
@@ -30,7 +31,7 @@ const isProjectsActive = activePage === 'projects';
                     <span class="opacity-40">Projects</span>
                 </div>
             ) : (
-                <NavLink href="/projects">Projects</NavLink>
+                <NavLink href={import.meta.env.BASE_URL + "projects"}>Projects</NavLink>
             )}
             
             <div id="itemcount" class="text-[min(1svw,2.02svh)]">({projectCount})</div>
@@ -43,7 +44,7 @@ const isProjectsActive = activePage === 'projects';
                     <span class="opacity-40">Portfolio</span>
                 </div>
             ) : (
-                <NavLink href="/portfolio">Portfolio</NavLink>
+                <NavLink href={import.meta.env.BASE_URL + "portfolio"}>Portfolio</NavLink>
             )}
 
             <div id="itemcount" class="text-[min(1svw,2.02svh)]">({portfolioCount})</div>
