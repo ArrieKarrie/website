@@ -8,6 +8,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  site: 'https://ArrieKarrie.github.io',
-  base: '/website/',
+  site: 'www.armanvandijk.nl',
+  base: '/',
 });
