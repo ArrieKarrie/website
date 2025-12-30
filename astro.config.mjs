@@ -8,6 +8,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  site: 'www.armanvandijk.nl',
+  site: 'https://armanvandijk.nl',
   base: '/',
 });
