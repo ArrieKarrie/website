@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://armanvandijk.nl/sitemap-index.xml
+Sitemap: https://armanvandijk.nl/sitemap-0.xml
