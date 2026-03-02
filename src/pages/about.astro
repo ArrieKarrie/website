@@ -14,7 +14,7 @@ import { Image } from 'astro:assets';
 ---
 
 <BaseLayout 
-title="AvD Photography | About"
+title="Arman van Dijk Photography | About"
 description="Welcome to Arman van Dijk Photography. Thanks for taking the time to get to know me a little bit better! Do not hesitate to contact me, I'd love to work together with you to create something memorable!"
 >
     
@@ -25,12 +25,15 @@ description="Welcome to Arman van Dijk Photography. Thanks for taking the time t
         <MenuIcons/>
 
         <div id="texts">
-            <Image
-                class="image" 
-                src={aboutImage} 
-                alt={"Photographer standing above the crowd at a party."}
-                loading="eager" 
-            />
+            <div class="image-wrapper">
+                <Image
+                    class="image" 
+                    src={aboutImage} 
+                    alt={"Photographer standing above the crowd at a party."}
+                    loading="eager" 
+                />
+                <p class="photo-credit">Photo by Jelle Wernik</p>
+            </div>
 
             <div class="text-content">
                 I'm a photographer who believes in the power of storytelling through images.
@@ -71,6 +74,26 @@ description="Welcome to Arman van Dijk Photography. Thanks for taking the time t
         object-fit: cover;
     }
 
+    .image-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* This aligns the credit to the bottom right of the image */
+        gap: 8px; /* Adds a small space between the image and text */
+    }
+
+    .photo-credit {
+        font-size: min(0.8svw, 1.5vh);
+        font-weight: 300;
+        margin: 0;
+        color: var(--color-text-secondary-light);
+        transition: color 0.3s ease;
+    }
+
+    /* Dark Mode Handling for the credit */
+    :global(.dark) .photo-credit {
+        color: var(--color-text-secondary-dark);
+    }
+
     .text-content {
         width: 35%; 
         text-align: justify;
@@ -97,9 +120,12 @@ description="Welcome to Arman van Dijk Photography. Thanks for taking the time t
         .image {
             width: 60svw;
         }
+        .photo-credit {
+            font-size: min(2.2svw, 1.83svh);
+        }
         .text-content {
             width: 80%;
-            text-align: center;
+            text-align: justify;
             font-size: min(3svw, 2.5vh);
         }
     }

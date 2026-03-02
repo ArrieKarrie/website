@@ -17,5 +17,13 @@ featuredImages:
 - "../../assets/featuredImages/Reitsema/236.webp"
 - "../../assets/featuredImages/Reitsema/248.webp"
 - "../../assets/featuredImages/Reitsema/226.webp"
+- "../../assets/featuredImages/LeminDefence/8.webp"
+- "../../assets/featuredImages/LeminDefence/11.webp"
+- "../../assets/featuredImages/LeminDefence/12.webp"
+- "../../assets/featuredImages/LeminDefence/27.webp"
+- "../../assets/featuredImages/LeminDefence/23.webp"
+- "../../assets/featuredImages/LeminDefence/18.webp"
+- "../../assets/featuredImages/LeminDefence/2.webp"
+- "../../assets/featuredImages/LeminDefence/26.webp"
 ---
 Events are yet another environment in which I thrive, as I love to surround myself with people from all walks of life. I find it interesting to hear all the stories of those around me, which allows me to connect with them and to better capture both the fleeting moments as well as the overarching storylines. I will always make sure to keep moving around the entire venue to find unique perspectives and interesting moments that might be tucked away from the busier areas, and if you spot me passing by for the umpteenth time, never hesitate to reach out for a photo or a conversation!

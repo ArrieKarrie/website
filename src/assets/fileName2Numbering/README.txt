@@ -1,0 +1,1 @@
+Renames all files in current directory to sequential numbers, starting with 1

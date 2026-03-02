@@ -1,3 +1,9 @@
+// CompressImnages.cjs
+//
+// Compresses all files in same folder and outputs to folder "optimized_1080h"
+// Navigate to assets folder (cd src/assets)
+// Execute using (node compressImages.cjs)
+
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp'); // The standard image library

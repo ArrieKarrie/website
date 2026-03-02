@@ -13,7 +13,7 @@ const { frontmatter } = Astro.props;
 const { title, heroImage, featuredImages, heroPosition } = frontmatter;
 ---
 
-<BaseLayout title={`AvD Photography | ${title}`}>
+<BaseLayout title={`Arman van Dijk Photography | ${title}`}>
     <PaddedPage>
         <div id="albumGrid">
             <Name/>
@@ -23,7 +23,7 @@ const { title, heroImage, featuredImages, heroPosition } = frontmatter;
             <div id="texts" class="flex flex-col">
                 <div id="title" class="text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)] text-[min(5svw,10.5svh)] pt-[min(1.4svw,2.828svh)] shrink-0">{title}</div>
                 
-                <div id="description" class="w-[50%] grow mask-fade relative cursor-grab active:cursor-grabbing">
+                <div id="description" class="w-[50%] grow mask-fade relative">
                     <div id="descriptionContent">
                         <slot/> 
                     </div>

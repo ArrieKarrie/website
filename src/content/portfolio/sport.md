@@ -16,5 +16,13 @@ featuredImages:
 - "../../assets/featuredImages/Fontainebleau/96.webp"
 - "../../assets/featuredImages/Fontainebleau/97.webp"
 - "../../assets/featuredImages/Fontainebleau/98.webp"
+- "../../assets/featuredImages/Fontainebleau2026/1.webp"
+- "../../assets/featuredImages/Fontainebleau2026/5.webp"
+- "../../assets/featuredImages/Fontainebleau2026/11.webp"
+- "../../assets/featuredImages/Fontainebleau2026/14.webp"
+- "../../assets/featuredImages/Fontainebleau2026/15.webp"
+- "../../assets/featuredImages/Fontainebleau2026/9.webp"
+- "../../assets/featuredImages/Fontainebleau2026/16.webp"
+- "../../assets/featuredImages/Fontainebleau2026/17.webp"
 ---
 As an avid fan of racket sports and bouldering, I have a great appreciation for all kinds of mediums that combine art with sports. In my work, I like to focus on some of the more common details around athletes that might not catch the eye immediately under normal circumstances, but when put together with static shots taken in the heat of the moment, they allow for a richer story to be told. Here as well, I like to work with naturally available light as much as possible to not interfere with the athletes' focus and to present a snapshot true to how the bystanders would have seen it as well.

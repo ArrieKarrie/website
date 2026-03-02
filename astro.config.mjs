@@ -12,6 +12,7 @@ export default defineConfig({
   },
 
   site: 'https://armanvandijk.nl',
+  trailingSlash: 'never',
   base: '/',
   integrations: [sitemap()],
 });

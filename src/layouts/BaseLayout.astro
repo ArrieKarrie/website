@@ -2,7 +2,23 @@
 import "../styles/global.css";
 import { ClientRouter as ViewTransitions } from 'astro:transitions';
 
-const { title, description = "Professional photography portfolio by Arman van Dijk Photography. Explore collections of automotive, event, wildlife, sport, portrait and concert photography." } = Astro.props;
+// 1. Add 'image' prop alongside title and description
+const { 
+    title, 
+    description = "Professional photography portfolio by Arman van Dijk Photography. Explore collections of automotive, event, wildlife, sport, portrait and concert photography.",
+    image = "/android-chrome-512x512.png" // Default image if none is provided
+} = Astro.props;
+
+// 2. Helper to strip trailing slashes to prevent Google redirect errors
+function removeTrailingSlash(str: string) {
+    return str.replace(/\/+$/, '');
+}
+
+// 3. Ensure URLs are absolute and formatted perfectly (No trailing slashes!)
+const fallbackSite = 'https://armanvandijk.nl'; // Just in case Astro.site isn't loaded
+const rawSiteUrl = new URL(Astro.url.pathname, Astro.site || fallbackSite).toString();
+const siteUrl = removeTrailingSlash(rawSiteUrl);
+const imageUrl = new URL(image, Astro.site || fallbackSite);
 ---
 
 <html lang="en">
@@ -12,11 +28,28 @@ const { title, description = "Professional photography portfolio by Arman van Di
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-         <!-- Credits -->
-        <!-- **Favicon:** [Twemoji](https://github.com/twitter/twemoji) by Twitter, Inc. Licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/). -->
-        <meta name="viewport" content="width=device-width" />
+         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
+
+        <meta name="description" content={description} />
+        <link rel="canonical" href={siteUrl} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+
+        <script type="application/ld+json">
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Arman van Dijk Photography",
+            "url": "https://armanvandijk.nl"
+          }
+        </script>
+
         <ViewTransitions />
 
         <script is:inline>

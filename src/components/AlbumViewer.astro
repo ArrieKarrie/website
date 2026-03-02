@@ -38,7 +38,7 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
     id="heroImage" 
     src={heroImage} 
     alt={title} 
-    class="h-full w-full object-cover transition-elements" 
+    class="h-full w-full object-cover transition-elements cursor-pointer" 
     style={`object-position: ${heroPosition};`}
 />
 
@@ -183,8 +183,8 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
                 content: galleryContent
             });
 
-            // Toggle Click
-            viewAlbumBtn.addEventListener('click', () => {
+            // Define the toggle function
+            const toggleGallery = () => {
                 if (isAnimating) return; 
                 isAnimating = true;
 
@@ -208,7 +208,7 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
                         viewAlbumBtn.innerText = "View cover";
                         viewAlbumBtn.classList.remove('opacity-0');
                         if(scrollIndicator) scrollIndicator.classList.remove('opacity-0');
-                        
+
                         isGalleryView = true;
                         isAnimating = false;
                         
@@ -218,8 +218,8 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
 
                 } else {
                     // -> CLOSE
-                    albumGallery.classList.remove('fade-in'); 
-                    
+                    albumGallery.classList.remove('fade-in');
+
                     setTimeout(() => {
                         albumGallery.classList.remove('is-ready');
                         albumGallery.classList.add('hidden-initial');
@@ -234,7 +234,11 @@ const { title, heroImage, featuredImages, heroPosition = "center" } = Astro.prop
                         isAnimating = false;
                     }, 350);
                 }
-            });
+            };
+
+            // Assign the function to BOTH elements
+            viewAlbumBtn.addEventListener('click', toggleGallery);
+            heroImage.addEventListener('click', toggleGallery);
         }
     });
 </script>
