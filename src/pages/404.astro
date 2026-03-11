@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NavLink from "../components/NavLink.astro";
+
+const home = import.meta.env.BASE_URL;
+---
+
+<BaseLayout 
+    title="404 - Page Not Found | Arman van Dijk Photography"
+    description="Oops! The page you are looking for does not exist."
+>
+    <div class="error-container text-[var(--color-text-primary-light)] dark:text-[var(--color-text-primary-dark)]">
+        <h1 class="text-6xl font-extralight mb-4">404</h1>
+        <p class="text-xl font-light mb-8">Oops! We couldn't find the page you were looking for.</p>
+        
+        <div class="text-lg">
+            <NavLink href={home}>&larr; Return to Homepage</NavLink>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        text-align: center;
+        padding: 2rem;
+    }
+</style>
